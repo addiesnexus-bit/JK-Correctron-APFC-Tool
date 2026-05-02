@@ -1,0 +1,1450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JK Correctron Smart Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap');
+        body { font-family: 'Syne', sans-serif; }
+        code, .mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        .module-section { display: none; }
+        .module-section.active { display: block; animation: fadeUp 0.25s ease; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .nav-btn.active { color: white; border-bottom: 2px solid currentColor; }
+        .inst-content { display: none; }
+        .inst-content.active { display: block; }
+        .param-badge { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 11px; background: #0f172a; border: 1px solid #334155; border-radius: 4px; padding: 2px 6px; color: #7dd3fc; }
+        .screen-box { font-family: 'JetBrains Mono', monospace; background: #001a00; border: 2px solid #166534; border-radius: 6px; padding: 12px; color: #4ade80; font-size: 13px; line-height: 1.6; }
+        .manual-section { scroll-margin-top: 80px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { background: #1e293b; color: #94a3b8; text-transform: uppercase; font-size: 11px; letter-spacing: 0.05em; padding: 10px 12px; text-align: left; border: 1px solid #334155; }
+        td { padding: 9px 12px; border: 1px solid #1e293b; color: #cbd5e1; vertical-align: top; }
+        tr:nth-child(even) td { background: #0f172a; }
+        .highlight-box { background: #0c1a2e; border-left: 3px solid #3b82f6; border-radius: 0 6px 6px 0; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+        .warning-box { background: #1c0a00; border-left: 3px solid #f97316; border-radius: 0 6px 6px 0; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+        .note-box { background: #0a1f0a; border-left: 3px solid #22c55e; border-radius: 0 6px 6px 0; padding: 12px 16px; margin: 12px 0; font-size: 13px; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 min-h-screen pb-20 md:pb-0">
+
+    <!-- DESKTOP NAV -->
+    <nav class="hidden md:flex bg-slate-950 border-b border-slate-800 px-6 py-3 sticky top-0 z-50 items-center justify-between">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="switchModule('home')">
+            <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center font-bold text-white text-sm shadow-lg shadow-blue-900/30">JK</div>
+            <div>
+                <div class="text-white font-bold text-base leading-tight tracking-wide">JKCR <span class="text-cyan-400 font-normal">APFC PLATFORM</span></div>
+                <div class="text-[10px] text-slate-500 tracking-widest uppercase">Open · Free · For Everyone</div>
+            </div>
+        </div>
+        <div class="flex items-center gap-1 text-sm font-medium">
+            <button onclick="switchModule('home')" class="nav-btn active px-3 py-2 text-slate-400 hover:text-white transition border-b-2 border-transparent">Home</button>
+            <button onclick="switchModule('learn')" class="nav-btn px-3 py-2 text-green-500 hover:text-green-300 transition border-b-2 border-transparent">Learn</button>
+            <button onclick="switchModule('calculate')" class="nav-btn px-3 py-2 text-orange-400 hover:text-orange-300 transition border-b-2 border-transparent">Calculate</button>
+            <button onclick="switchModule('troubleshoot')" class="nav-btn px-3 py-2 text-red-400 hover:text-red-300 transition border-b-2 border-transparent">Troubleshoot</button>
+            <button onclick="switchModule('install')" class="nav-btn px-3 py-2 text-blue-400 hover:text-blue-300 transition border-b-2 border-transparent">Install</button>
+            <button onclick="switchModule('dashboard')" class="nav-btn px-3 py-2 text-purple-400 hover:text-purple-300 transition border-b-2 border-transparent">Dashboard</button>
+            <button onclick="switchModule('manual')" class="nav-btn px-3 py-2 text-teal-400 hover:text-teal-300 transition border-b-2 border-transparent">Manual</button>
+        </div>
+    </nav>
+
+    <!-- MOBILE TOP BAR -->
+    <div class="md:hidden bg-slate-950 border-b border-slate-800 px-4 py-3 sticky top-0 z-50 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center font-bold text-white text-xs">AC</div>
+            <span class="text-white font-bold text-base">JK Correctron</span>
+        </div>
+        <span class="text-[10px] bg-slate-800 text-cyan-400 px-2 py-1 rounded-full border border-slate-700 font-bold tracking-wider">100% FREE</span>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-6">
+
+        <!-- ========== HOME ========== -->
+        <section id="home" class="module-section active">
+            <div class="text-center py-12 md:py-20">
+                <div class="inline-flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-full px-4 py-1.5 text-xs text-slate-400 font-mono mb-8 tracking-widest">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    100% FREE &nbsp;·&nbsp; NO LOGIN &nbsp;·&nbsp; NO SIGNUP &nbsp;·&nbsp; INSTANT ACCESS
+                </div>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-4 leading-tight">
+                    JK Correctron APFC<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400">Smart Platform</span>
+                </h1>
+                <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10">The complete companion for the Accuvar Trinity KVAR-Based Controller. Learn, calculate, install, troubleshoot — all in one place.</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3 mb-16">
+                    <button onclick="switchModule('learn')" class="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-lg font-bold transition shadow-lg shadow-green-900/20">📚 Learn Basics</button>
+                    <button onclick="switchModule('calculate')" class="bg-orange-600 hover:bg-orange-500 text-white px-8 py-3 rounded-lg font-bold transition shadow-lg shadow-orange-900/20">🧮 Calculate kVAR</button>
+                    <button onclick="switchModule('troubleshoot')" class="bg-red-600 hover:bg-red-500 text-white px-8 py-3 rounded-lg font-bold transition shadow-lg shadow-red-900/20">🔧 Fix Issues</button>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div onclick="switchModule('learn')" class="bg-slate-900 border border-slate-800 hover:border-green-500/40 rounded-xl p-6 cursor-pointer transition hover:-translate-y-1 group">
+                    <div class="text-3xl mb-3">📚</div>
+                    <h3 class="text-white font-bold text-lg mb-1 group-hover:text-green-400 transition">Learn</h3>
+                    <p class="text-slate-500 text-sm">Interactive training on PF basics, installation, programming, run mode, and troubleshooting theory.</p>
+                </div>
+                <div onclick="switchModule('calculate')" class="bg-slate-900 border border-slate-800 hover:border-orange-500/40 rounded-xl p-6 cursor-pointer transition hover:-translate-y-1 group">
+                    <div class="text-3xl mb-3">🧮</div>
+                    <h3 class="text-white font-bold text-lg mb-1 group-hover:text-orange-400 transition">Calculate</h3>
+                    <p class="text-slate-500 text-sm">kVAR simulation tool — enter load, current PF, target PF and get required capacitor stages instantly.</p>
+                </div>
+                <div onclick="switchModule('troubleshoot')" class="bg-slate-900 border border-slate-800 hover:border-red-500/40 rounded-xl p-6 cursor-pointer transition hover:-translate-y-1 group">
+                    <div class="text-3xl mb-3">🔧</div>
+                    <h3 class="text-white font-bold text-lg mb-1 group-hover:text-red-400 transition">Troubleshoot</h3>
+                    <p class="text-slate-500 text-sm">Step-by-step diagnostic wizard. Answer YES/NO questions and get the exact root cause and fix.</p>
+                </div>
+                <div onclick="switchModule('install')" class="bg-slate-900 border border-slate-800 hover:border-blue-500/40 rounded-xl p-6 cursor-pointer transition hover:-translate-y-1 group">
+                    <div class="text-3xl mb-3">⚡</div>
+                    <h3 class="text-white font-bold text-lg mb-1 group-hover:text-blue-400 transition">Install</h3>
+                    <p class="text-slate-500 text-sm">5-step installation wizard with wiring diagrams, terminal labels, and pre-commission checklist.</p>
+                </div>
+                <div onclick="switchModule('dashboard')" class="bg-slate-900 border border-slate-800 hover:border-purple-500/40 rounded-xl p-6 cursor-pointer transition hover:-translate-y-1 group">
+                    <div class="text-3xl mb-3">📊</div>
+                    <h3 class="text-white font-bold text-lg mb-1 group-hover:text-purple-400 transition">Dashboard</h3>
+                    <p class="text-slate-500 text-sm">Live simulated dashboard — PF, KW, kVAR, stages, THD, alerts. IoT-ready architecture.</p>
+                </div>
+                <div onclick="switchModule('manual')" class="bg-slate-900 border border-slate-800 hover:border-teal-500/40 rounded-xl p-6 cursor-pointer transition hover:-translate-y-1 group">
+                    <div class="text-3xl mb-3">📖</div>
+                    <h3 class="text-white font-bold text-lg mb-1 group-hover:text-teal-400 transition">Digital Manual</h3>
+                    <p class="text-slate-500 text-sm">Complete searchable version of the official Accuvar Trinity User Manual v2.0 (01.11.2021).</p>
+                </div>
+            </div>
+            <div class="mt-16 border-t border-slate-800 pt-6 text-center text-slate-600 text-xs tracking-widest">
+                Works on Any Device &nbsp;·&nbsp; Works Offline & Online &nbsp;·&nbsp; Fast, Simple & Powerful
+            </div>
+        </section>
+
+        <!-- ========== LEARN ========== -->
+        <section id="learn" class="module-section">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-green-400">Training & Manual</h2>
+                <button onclick="switchModule('home')" class="text-slate-500 hover:text-white text-sm transition">← Home</button>
+            </div>
+            <div class="flex flex-col md:flex-row gap-6">
+                <div class="w-full md:w-1/4 space-y-2 shrink-0">
+                    <button onclick="loadTopic(0)" id="tbtn-0" class="w-full text-left px-4 py-3 rounded-lg bg-green-900/30 text-white font-semibold border-l-4 border-green-500 text-sm">1. PF Basics</button>
+                    <button onclick="loadTopic(1)" id="tbtn-1" class="w-full text-left px-4 py-3 rounded-lg bg-slate-900 text-slate-400 font-semibold border-l-4 border-transparent hover:bg-slate-800 text-sm transition">2. Installation</button>
+                    <button onclick="loadTopic(2)" id="tbtn-2" class="w-full text-left px-4 py-3 rounded-lg bg-slate-900 text-slate-400 font-semibold border-l-4 border-transparent hover:bg-slate-800 text-sm transition">3. Programming</button>
+                    <button onclick="loadTopic(3)" id="tbtn-3" class="w-full text-left px-4 py-3 rounded-lg bg-slate-900 text-slate-400 font-semibold border-l-4 border-transparent hover:bg-slate-800 text-sm transition">4. Run Mode</button>
+                    <button onclick="loadTopic(4)" id="tbtn-4" class="w-full text-left px-4 py-3 rounded-lg bg-slate-900 text-slate-400 font-semibold border-l-4 border-transparent hover:bg-slate-800 text-sm transition">5. Troubleshooting</button>
+                </div>
+                <div class="flex-1 bg-slate-900 border border-slate-800 rounded-xl p-6 min-h-[500px] flex flex-col">
+                    <div id="topic-content" class="flex-1 text-sm leading-relaxed text-slate-300"></div>
+                    <div class="mt-6 pt-4 border-t border-slate-800 text-right">
+                        <button onclick="startQuiz()" class="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-lg font-bold transition">Take Quiz →</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Quiz Modal -->
+            <div id="quiz-modal" class="hidden fixed inset-0 bg-slate-950/95 z-[60] flex items-center justify-center p-4">
+                <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-6 shadow-2xl">
+                    <h3 id="quiz-title" class="text-xl font-bold text-green-400 mb-6"></h3>
+                    <div id="quiz-body" class="space-y-6"></div>
+                    <div id="quiz-score" class="hidden mt-6 bg-green-900/20 border border-green-700/40 rounded-xl p-4 text-center">
+                        <div class="text-2xl font-extrabold text-white mb-1" id="quiz-score-text"></div>
+                        <p class="text-slate-400 text-sm">Retry to strengthen your understanding.</p>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center">
+                        <button onclick="closeQuiz()" class="text-slate-500 hover:text-white text-sm transition">Close</button>
+                        <div class="flex gap-3">
+                            <button onclick="retryQuiz()" id="retry-btn" class="hidden bg-slate-800 hover:bg-slate-700 text-white px-5 py-2 rounded-lg font-bold text-sm transition">Retry Quiz</button>
+                            <button onclick="submitQuiz()" id="quiz-submit" class="bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-lg font-bold text-sm transition">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== CALCULATE ========== -->
+        <section id="calculate" class="module-section">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-orange-400">kVAR Simulation Tool</h2>
+                <button onclick="switchModule('home')" class="text-slate-500 hover:text-white text-sm transition">← Home</button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Inputs -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-5">System Parameters</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1.5 font-mono uppercase tracking-wider">Load (kW)</label>
+                            <input type="number" id="calc-kw" value="100" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-orange-500 font-mono transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1.5 font-mono uppercase tracking-wider">Current Power Factor</label>
+                            <input type="number" id="calc-curr-pf" value="0.80" step="0.01" min="0.1" max="0.99" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-orange-500 font-mono transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-500 mb-1.5 font-mono uppercase tracking-wider">Target Power Factor</label>
+                            <input type="number" id="calc-target-pf" value="0.99" step="0.01" min="0.8" max="1.0" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-orange-500 font-mono transition">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs text-slate-500 mb-1.5 font-mono uppercase tracking-wider">System Voltage (V)</label>
+                                <input type="number" id="calc-volts" value="415" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-orange-500 font-mono transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-slate-500 mb-1.5 font-mono uppercase tracking-wider">Stages</label>
+                                <select id="calc-stages" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-orange-500 transition">
+                                    <option value="8">8 Stages</option>
+                                    <option value="12">12 Stages</option>
+                                    <option value="15">15 Stages</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex gap-3">
+                        <button onclick="runCalculation()" class="flex-1 bg-orange-600 hover:bg-orange-500 text-white py-3 rounded-lg font-bold transition">Calculate</button>
+                        <button onclick="resetCalc()" class="bg-slate-800 hover:bg-slate-700 text-white py-3 px-5 rounded-lg font-bold transition">Reset</button>
+                    </div>
+                </div>
+                <!-- Results -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 flex flex-col">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-5">Results</h3>
+                    <div id="calc-warning" class="hidden mb-4 bg-yellow-950 border border-yellow-700/50 rounded-lg p-3 text-yellow-400 text-xs font-mono">⚠ Target PF &gt; 0.99 — Risk of over-compensation (leading PF).</div>
+                    <div class="flex-1 flex flex-col items-center justify-center text-center py-4">
+                        <div class="text-slate-500 text-xs uppercase tracking-widest mb-2 font-mono">Required Reactive Power</div>
+                        <div class="text-6xl font-extrabold text-orange-400 font-mono mb-1"><span id="res-kvar">--</span></div>
+                        <div class="text-orange-600 font-bold text-lg mb-6">kVAR</div>
+                        <div class="w-full bg-slate-950 rounded-full h-5 overflow-hidden border border-slate-800 relative mb-2">
+                            <div id="pf-bar" class="h-full bg-gradient-to-r from-orange-600 to-yellow-400 transition-all duration-1000" style="width:80%"></div>
+                            <div class="absolute inset-0 flex items-center justify-center text-[10px] font-bold font-mono pointer-events-none" id="pf-bar-label">0.80 → 0.99</div>
+                        </div>
+                        <div class="text-xs text-slate-500 flex justify-between w-full px-1 font-mono"><span>0.0</span><span>1.0</span></div>
+                    </div>
+                    <div class="mt-4 space-y-2 text-sm border-t border-slate-800 pt-4">
+                        <div class="flex justify-between"><span class="text-slate-500">Recommended Stages</span><span id="res-stages" class="text-white font-mono font-bold">--</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500">kVAR per Stage</span><span id="res-per-stage" class="text-white font-mono font-bold">--</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500">PF Improvement</span><span id="res-improv" class="text-green-400 font-mono font-bold">--</span></div>
+                        <div class="flex justify-between"><span class="text-slate-500">Penalty Risk</span><span id="res-penalty" class="font-bold">--</span></div>
+                    </div>
+                    <div id="stage-breakdown" class="mt-4 hidden text-xs font-mono text-slate-400 bg-slate-950 rounded-lg p-3 border border-slate-800 max-h-32 overflow-y-auto"></div>
+                    <div class="mt-4 flex gap-3">
+                        <button onclick="downloadReport()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-2 rounded-lg text-sm font-bold transition flex items-center justify-center gap-2">⬇ Report</button>
+                        <button onclick="shareResult()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-2 rounded-lg text-sm font-bold transition flex items-center justify-center gap-2">📋 Copy</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== TROUBLESHOOT ========== -->
+        <section id="troubleshoot" class="module-section">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-red-400">Troubleshooting Assistant</h2>
+                <button onclick="switchModule('home')" class="text-slate-500 hover:text-white text-sm transition">← Home</button>
+            </div>
+            <div id="ts-step-1" class="bg-slate-900 border border-slate-800 rounded-xl p-6">
+                <p class="text-slate-400 text-sm mb-5">Select the problem you are observing. The assistant will guide you to the root cause using the manual's diagnostic procedure.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <button onclick="tsSelect(1)" class="text-left bg-slate-950 border border-slate-800 hover:border-red-500/60 rounded-xl p-4 transition group">
+                        <span class="text-red-400 font-bold text-xs uppercase tracking-wider block mb-1">Problem 1</span>
+                        <span class="text-white text-sm">Relay is completely dead — no display</span>
+                    </button>
+                    <button onclick="tsSelect(2)" class="text-left bg-slate-950 border border-slate-800 hover:border-red-500/60 rounded-xl p-4 transition group">
+                        <span class="text-red-400 font-bold text-xs uppercase tracking-wider block mb-1">Problem 2</span>
+                        <span class="text-white text-sm">PF shown is wrong or unexpected</span>
+                    </button>
+                    <button onclick="tsSelect(3)" class="text-left bg-slate-950 border border-slate-800 hover:border-red-500/60 rounded-xl p-4 transition group">
+                        <span class="text-red-400 font-bold text-xs uppercase tracking-wider block mb-1">Problem 3</span>
+                        <span class="text-white text-sm">Capacitors switch ON but PF doesn't improve</span>
+                    </button>
+                    <button onclick="tsSelect(4)" class="text-left bg-slate-950 border border-slate-800 hover:border-red-500/60 rounded-xl p-4 transition group">
+                        <span class="text-red-400 font-bold text-xs uppercase tracking-wider block mb-1">Problem 4</span>
+                        <span class="text-white text-sm">PF improves but doesn't reach set value</span>
+                    </button>
+                    <button onclick="tsSelect(5)" class="text-left bg-slate-950 border border-slate-800 hover:border-red-500/60 rounded-xl p-4 transition group">
+                        <span class="text-red-400 font-bold text-xs uppercase tracking-wider block mb-1">Problem 5</span>
+                        <span class="text-white text-sm">Capacitors switch ON but won't switch OFF</span>
+                    </button>
+                    <button onclick="tsSelect(6)" class="text-left bg-slate-950 border border-slate-800 hover:border-red-500/60 rounded-xl p-4 transition group">
+                        <span class="text-red-400 font-bold text-xs uppercase tracking-wider block mb-1">Problem 6</span>
+                        <span class="text-white text-sm">PF meter shows 1.0 always — current inadequate</span>
+                    </button>
+                </div>
+            </div>
+            <div id="ts-step-2" class="hidden bg-slate-900 border border-slate-800 rounded-xl p-6">
+                <div class="flex justify-between items-start mb-6">
+                    <h3 class="text-red-400 font-bold text-lg">Diagnostic Wizard</h3>
+                    <button onclick="tsReset()" class="text-slate-500 hover:text-white text-sm underline transition">← Change Problem</button>
+                </div>
+                <div id="ts-dialogue">
+                    <div class="text-center py-8">
+                        <p id="ts-question" class="text-xl text-white mb-8 max-w-lg mx-auto leading-relaxed"></p>
+                        <div class="flex justify-center gap-4">
+                            <button onclick="tsAnswer('yes')" class="bg-green-600 hover:bg-green-500 text-white px-10 py-3 rounded-xl font-bold text-lg transition shadow-lg shadow-green-900/20">YES</button>
+                            <button onclick="tsAnswer('no')" class="bg-red-700 hover:bg-red-600 text-white px-10 py-3 rounded-xl font-bold text-lg transition shadow-lg shadow-red-900/20">NO</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="ts-result" class="hidden">
+                    <div class="bg-red-950/40 border border-red-800/40 rounded-xl p-5 mb-4">
+                        <div class="text-xs text-red-400 uppercase tracking-widest font-bold mb-2">Root Cause Identified</div>
+                        <p id="ts-cause" class="text-white text-lg font-semibold"></p>
+                    </div>
+                    <div class="bg-blue-950/40 border border-blue-800/40 rounded-xl p-5 mb-6">
+                        <div class="text-xs text-blue-400 uppercase tracking-widest font-bold mb-2">Recommended Solution</div>
+                        <p id="ts-solution" class="text-slate-200 text-sm leading-relaxed"></p>
+                    </div>
+                    <div class="text-center">
+                        <button onclick="tsReset()" class="bg-slate-800 hover:bg-slate-700 text-white px-6 py-2.5 rounded-lg font-bold transition">Start Over</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== INSTALL ========== -->
+        <section id="install" class="module-section">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-blue-400">Installation Wizard</h2>
+                <button onclick="switchModule('home')" class="text-slate-500 hover:text-white text-sm transition">← Home</button>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden flex flex-col md:flex-row">
+                <div class="md:w-52 bg-slate-950 p-4 flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible shrink-0">
+                    <button onclick="instSetStep(1)" id="inst-btn-1" class="whitespace-nowrap text-left px-4 py-2.5 rounded-lg bg-blue-600 text-white font-semibold text-sm">1. System Type</button>
+                    <button onclick="instSetStep(2)" id="inst-btn-2" class="whitespace-nowrap text-left px-4 py-2.5 rounded-lg bg-transparent text-slate-400 hover:text-white font-semibold text-sm transition">2. Wiring Diagram</button>
+                    <button onclick="instSetStep(3)" id="inst-btn-3" class="whitespace-nowrap text-left px-4 py-2.5 rounded-lg bg-transparent text-slate-400 hover:text-white font-semibold text-sm transition">3. Instructions</button>
+                    <button onclick="instSetStep(4)" id="inst-btn-4" class="whitespace-nowrap text-left px-4 py-2.5 rounded-lg bg-transparent text-slate-400 hover:text-white font-semibold text-sm transition">4. Checklist</button>
+                    <button onclick="instSetStep(5)" id="inst-btn-5" class="whitespace-nowrap text-left px-4 py-2.5 rounded-lg bg-transparent text-slate-400 hover:text-white font-semibold text-sm transition">5. Commission</button>
+                </div>
+                <div class="flex-1 p-6 min-h-[400px]">
+                    <!-- Step 1 -->
+                    <div id="inst-step-1" class="inst-content active">
+                        <h3 class="text-xl font-bold text-white mb-4">Select Electrical System</h3>
+                        <div class="space-y-3 max-w-md">
+                            <label class="flex items-center gap-3 p-4 bg-slate-950 rounded-xl border border-blue-500 cursor-pointer">
+                                <input type="radio" name="sys" checked class="w-5 h-5 accent-blue-500">
+                                <div><div class="text-white font-semibold">3 Phase 4 Wire (3P4W)</div><div class="text-slate-500 text-xs mt-0.5">Supported by Accuvar Trinity</div></div>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 bg-slate-950/50 rounded-xl border border-slate-800 cursor-not-allowed opacity-40">
+                                <input type="radio" name="sys" disabled class="w-5 h-5">
+                                <div><div class="text-slate-400 font-semibold">3 Phase 3 Wire</div><div class="text-slate-600 text-xs mt-0.5">Not supported by Accuvar</div></div>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 bg-slate-950/50 rounded-xl border border-slate-800 cursor-not-allowed opacity-40">
+                                <input type="radio" name="sys" disabled class="w-5 h-5">
+                                <div><div class="text-slate-400 font-semibold">1 Phase</div><div class="text-slate-600 text-xs mt-0.5">Not supported by Accuvar</div></div>
+                            </label>
+                        </div>
+                        <div class="mt-8 text-right"><button onclick="instSetStep(2)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-lg font-bold transition">Next →</button></div>
+                    </div>
+                    <!-- Step 2 -->
+                    <div id="inst-step-2" class="inst-content">
+                        <h3 class="text-xl font-bold text-white mb-4">Connection Scheme — Back View</h3>
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 overflow-x-auto">
+                            <svg viewBox="0 0 760 480" width="100%" xmlns="http://www.w3.org/2000/svg" style="min-width:560px;font-family:'JetBrains Mono',monospace">
+                                <!-- Background -->
+                                <rect x="0" y="0" width="760" height="480" fill="#020617"/>
+                                <!-- Unit body -->
+                                <rect x="220" y="30" width="320" height="420" fill="#0f172a" stroke="#334155" stroke-width="2" rx="6"/>
+                                <text x="380" y="58" fill="#94a3b8" font-size="13" text-anchor="middle" font-weight="700" letter-spacing="2">ACCUVAR TRINITY</text>
+                                <text x="380" y="74" fill="#475569" font-size="9" text-anchor="middle" letter-spacing="1">KVAR CONTROLLER FOR LT CAPACITOR BANKS</text>
+                                <!-- LEFT SIDE LABEL -->
+                                <text x="100" y="26" fill="#22c55e" font-size="10" text-anchor="middle" font-weight="700">RELAY OUTPUTS</text>
+
+                                <!-- Left side relay terminals 1-15 -->
+                                <g id="left-terminals">
+                                    <!-- Terminals 1-15 (relay outputs - green) -->
+                                    <rect x="50" y="30" width="50" height="310" fill="#052e16" stroke="#166534" stroke-width="1.5" rx="4"/>
+                                    <text x="75" y="50" fill="#4ade80" font-size="10" text-anchor="middle" font-weight="700">1</text>
+                                    <text x="75" y="70" fill="#4ade80" font-size="10" text-anchor="middle">2</text>
+                                    <text x="75" y="90" fill="#4ade80" font-size="10" text-anchor="middle">3</text>
+                                    <text x="75" y="110" fill="#4ade80" font-size="10" text-anchor="middle">4</text>
+                                    <text x="75" y="130" fill="#4ade80" font-size="10" text-anchor="middle">5</text>
+                                    <text x="75" y="150" fill="#4ade80" font-size="10" text-anchor="middle">6</text>
+                                    <text x="75" y="170" fill="#4ade80" font-size="10" text-anchor="middle">7</text>
+                                    <text x="75" y="190" fill="#4ade80" font-size="10" text-anchor="middle">8</text>
+                                    <text x="75" y="210" fill="#4ade80" font-size="10" text-anchor="middle">9</text>
+                                    <text x="75" y="230" fill="#4ade80" font-size="10" text-anchor="middle">10</text>
+                                    <text x="75" y="250" fill="#4ade80" font-size="10" text-anchor="middle">11</text>
+                                    <text x="75" y="270" fill="#4ade80" font-size="10" text-anchor="middle">12</text>
+                                    <text x="75" y="290" fill="#4ade80" font-size="10" text-anchor="middle">13</text>
+                                    <text x="75" y="310" fill="#4ade80" font-size="10" text-anchor="middle">14</text>
+                                    <text x="75" y="330" fill="#4ade80" font-size="10" text-anchor="middle">15</text>
+                                    <!-- Lines connecting to unit body -->
+                                    <line x1="100" y1="50" x2="220" y2="50" stroke="#166534" stroke-width="1" stroke-dasharray="3,3"/>
+                                    <line x1="100" y1="330" x2="220" y2="330" stroke="#166534" stroke-width="1" stroke-dasharray="3,3"/>
+                                    <!-- 16, 17C (common) -->
+                                    <rect x="50" y="355" width="50" height="30" fill="#1c3a00" stroke="#3f6212" stroke-width="1.5" rx="4"/>
+                                    <text x="75" y="368" fill="#bef264" font-size="9" text-anchor="middle" font-weight="700">16</text>
+                                    <text x="75" y="380" fill="#bef264" font-size="9" text-anchor="middle">17C</text>
+                                    <text x="75" y="400" fill="#6b7280" font-size="8" text-anchor="middle">COMMON</text>
+                                    <line x1="100" y1="370" x2="220" y2="370" stroke="#bef264" stroke-width="1" stroke-dasharray="3,3"/>
+                                </g>
+
+                                <!-- RIGHT SIDE TERMINALS -->
+                                <!-- RS485 (purple) - 34 A+, 33 B- -->
+                                <rect x="540" y="85" width="130" height="38" fill="#2e1065" stroke="#7c3aed" stroke-width="1.5" rx="4"/>
+                                <text x="605" y="100" fill="#c4b5fd" font-size="10" text-anchor="middle" font-weight="700">34 (A+) RS485</text>
+                                <text x="605" y="116" fill="#c4b5fd" font-size="10" text-anchor="middle">33 (B−) RS485</text>
+                                <line x1="540" y1="94" x2="540" y2="94"/><line x1="540" y1="94" x2="220" y2="94" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="540" y1="110" x2="220" y2="110" stroke="#7c3aed" stroke-width="1" stroke-dasharray="3,2"/>
+                                <text x="680" y="96" fill="#7c3aed" font-size="9">RS485</text>
+                                <text x="680" y="114" fill="#7c3aed" font-size="9">COMM</text>
+
+                                <!-- MAIN CT INPUT (orange) - 32 M1, 31 L1, 30 M2, 29 L2, 28 M3, 27 L3 -->
+                                <rect x="540" y="135" width="130" height="120" fill="#431407" stroke="#ea580c" stroke-width="1.5" rx="4"/>
+                                <text x="605" y="150" fill="#fdba74" font-size="10" text-anchor="middle" font-weight="700">32 (M1) R-CT S1</text>
+                                <text x="605" y="167" fill="#fdba74" font-size="10" text-anchor="middle">31 (L1) R-CT S2</text>
+                                <text x="605" y="184" fill="#fdba74" font-size="10" text-anchor="middle">30 (M2) Y-CT S1</text>
+                                <text x="605" y="201" fill="#fdba74" font-size="10" text-anchor="middle">29 (L2) Y-CT S2</text>
+                                <text x="605" y="218" fill="#fdba74" font-size="10" text-anchor="middle">28 (M3) B-CT S1</text>
+                                <text x="605" y="235" fill="#fdba74" font-size="10" text-anchor="middle">27 (L3) B-CT S2</text>
+                                <line x1="540" y1="148" x2="220" y2="148" stroke="#ea580c" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="540" y1="165" x2="220" y2="165" stroke="#ea580c" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="540" y1="182" x2="220" y2="182" stroke="#ea580c" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="540" y1="199" x2="220" y2="199" stroke="#ea580c" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="540" y1="216" x2="220" y2="216" stroke="#ea580c" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="540" y1="233" x2="220" y2="233" stroke="#ea580c" stroke-width="1" stroke-dasharray="3,2"/>
+                                <text x="680" y="188" fill="#ea580c" font-size="9">M1-L3</text>
+                                <text x="680" y="200" fill="#ea580c" font-size="9">MAIN CT</text>
+                                <text x="680" y="212" fill="#ea580c" font-size="9">INPUT</text>
+
+                                <!-- CAP CT (yellow) - 26 CM, 25 CL -->
+                                <rect x="540" y="267" width="130" height="38" fill="#422006" stroke="#d97706" stroke-width="1.5" rx="4"/>
+                                <text x="605" y="282" fill="#fde68a" font-size="10" text-anchor="middle" font-weight="700">26 (CM) CAP-CT</text>
+                                <text x="605" y="298" fill="#fde68a" font-size="10" text-anchor="middle">25 (CL) CAP-CT</text>
+                                <line x1="540" y1="280" x2="220" y2="280" stroke="#d97706" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="540" y1="296" stroke="#d97706" stroke-width="1" stroke-dasharray="3,2" x2="220" y2="296"/>
+                                <text x="680" y="285" fill="#d97706" font-size="9">CM-CL</text>
+                                <text x="680" y="297" fill="#d97706" font-size="9">CAP CT</text>
+
+                                <!-- MAINS VOLTAGE (color coded) - 24R, 23Y, 22B, 21N -->
+                                <rect x="540" y="317" width="130" height="78" fill="#0d0d0d" stroke="#374151" stroke-width="1.5" rx="4"/>
+                                <text x="605" y="333" fill="#ef4444" font-size="10" text-anchor="middle" font-weight="700">24 (R) PHASE R</text>
+                                <text x="605" y="350" fill="#facc15" font-size="10" text-anchor="middle" font-weight="700">23 (Y) PHASE Y</text>
+                                <text x="605" y="367" fill="#60a5fa" font-size="10" text-anchor="middle" font-weight="700">22 (B) PHASE B</text>
+                                <text x="605" y="384" fill="#9ca3af" font-size="10" text-anchor="middle" font-weight="700">21 (N) NEUTRAL</text>
+                                <line x1="540" y1="330" x2="220" y2="330" stroke="#ef4444" stroke-width="1.5"/>
+                                <line x1="540" y1="347" x2="220" y2="347" stroke="#facc15" stroke-width="1.5"/>
+                                <line x1="540" y1="364" x2="220" y2="364" stroke="#60a5fa" stroke-width="1.5"/>
+                                <line x1="540" y1="381" x2="220" y2="381" stroke="#6b7280" stroke-width="1.5"/>
+                                <text x="680" y="352" fill="#6b7280" font-size="9">MAINS</text>
+                                <text x="680" y="364" fill="#6b7280" font-size="9">VOLTAGE</text>
+
+                                <!-- K1, K2 (Manual mode) -->
+                                <rect x="540" y="407" width="130" height="38" fill="#1c1917" stroke="#78716c" stroke-width="1.5" rx="4"/>
+                                <text x="605" y="422" fill="#e7e5e4" font-size="10" text-anchor="middle" font-weight="700">19 (K1) 230V IN</text>
+                                <text x="605" y="438" fill="#e7e5e4" font-size="10" text-anchor="middle">18 (K2) 230V IN</text>
+                                <line x1="540" y1="420" x2="220" y2="420" stroke="#78716c" stroke-width="1" stroke-dasharray="3,2"/>
+                                <line x1="540" y1="436" x2="220" y2="436" stroke="#78716c" stroke-width="1" stroke-dasharray="3,2"/>
+                                <text x="680" y="425" fill="#78716c" font-size="9">MANUAL</text>
+                                <text x="680" y="437" fill="#78716c" font-size="9">MODE</text>
+
+                                <!-- Legend -->
+                                <g transform="translate(50,455)">
+                                    <rect x="0" y="0" width="10" height="8" fill="#4ade80"/>
+                                    <text x="14" y="8" fill="#94a3b8" font-size="8">Relay O/P</text>
+                                    <rect x="75" y="0" width="10" height="8" fill="#ea580c"/>
+                                    <text x="89" y="8" fill="#94a3b8" font-size="8">Main CT</text>
+                                    <rect x="150" y="0" width="10" height="8" fill="#ef4444"/>
+                                    <text x="164" y="8" fill="#94a3b8" font-size="8">R Phase</text>
+                                    <rect x="220" y="0" width="10" height="8" fill="#facc15"/>
+                                    <text x="234" y="8" fill="#94a3b8" font-size="8">Y Phase</text>
+                                    <rect x="290" y="0" width="10" height="8" fill="#60a5fa"/>
+                                    <text x="304" y="8" fill="#94a3b8" font-size="8">B Phase</text>
+                                    <rect x="360" y="0" width="10" height="8" fill="#7c3aed"/>
+                                    <text x="374" y="8" fill="#94a3b8" font-size="8">RS485</text>
+                                    <rect x="420" y="0" width="10" height="8" fill="#d97706"/>
+                                    <text x="434" y="8" fill="#94a3b8" font-size="8">Cap CT</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <button onclick="instSetStep(1)" class="text-slate-500 hover:text-white text-sm transition">← Back</button>
+                            <button onclick="instSetStep(3)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-lg font-bold transition">Next →</button>
+                        </div>
+                    </div>
+                    <!-- Step 3 -->
+                    <div id="inst-step-3" class="inst-content">
+                        <h3 class="text-xl font-bold text-white mb-4">Step-by-Step Instructions</h3>
+                        <div class="space-y-3 text-sm max-h-80 overflow-y-auto pr-2">
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 1</span>
+                                <p class="text-slate-300 mt-1">Push the unit into the Panel and mount it by using the clamps provided. Panel cutout required: <span class="param-badge">138 × 138 mm</span></p>
+                            </div>
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 2</span>
+                                <p class="text-slate-300 mt-1">Connect the three phases with sequence <span class="param-badge">R-Y-B</span> to terminals <span class="param-badge">24(R)</span>, <span class="param-badge">23(Y)</span>, <span class="param-badge">22(B)</span> through control fuses of <span class="param-badge">1.0 Amp</span> rating to protect electronics from over-voltages.</p>
+                            </div>
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 3</span>
+                                <p class="text-slate-300 mt-1">Connect the neutral wire to terminal <span class="param-badge">21 (N)</span>.</p>
+                            </div>
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 4</span>
+                                <p class="text-slate-300 mt-1">Connect the R-phase main CT two wires to <span class="param-badge">M1(32)</span> &amp; <span class="param-badge">L1(31)</span> — S1 from CT goes to M1. Y-phase CT to <span class="param-badge">M2(30)</span> &amp; <span class="param-badge">L2(29)</span> — S1 to M2. B-phase CT to <span class="param-badge">M3(28)</span> &amp; <span class="param-badge">L3(27)</span> — S1 to M3.</p>
+                            </div>
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 5</span>
+                                <p class="text-slate-300 mt-1">Connect the Y-phase capacitor CT two wires to terminals <span class="param-badge">CM(26)</span> &amp; <span class="param-badge">CL(25)</span> — S1 from CT goes to CM.</p>
+                            </div>
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 6</span>
+                                <p class="text-slate-300 mt-1">Switch on the three-phase supply. Unit will power on and display the power-on message, then enter Run Mode automatically.</p>
+                            </div>
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 7</span>
+                                <p class="text-slate-300 mt-1">Enter Programming Mode by pressing <span class="param-badge">PROG/RUN</span> for ~5 seconds. Set <strong>CT Ratio for Main CTs</strong>, <strong>CT Ratio for Capacitor CTs</strong>, and <strong>Alarm Mode</strong> as minimum required parameters.</p>
+                            </div>
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 8</span>
+                                <p class="text-slate-300 mt-1">Ensure all capacitors are in circuit (all fuse links pushed in). Give <span class="param-badge">AUTOSENSE</span> command. ACCUVAR will switch one bank at a time and display the bank size of every stage.</p>
+                            </div>
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 9</span>
+                                <p class="text-slate-300 mt-1">If phase sequence is unknown, enable phase sequence detection. The unit will switch <span class="param-badge">REF_BANK</span> ON and OFF to auto-correct. If load is non-linear, disable it temporarily and manually enter the phase sequence.</p>
+                            </div>
+                            <div class="bg-slate-950 rounded-xl border border-slate-800 p-4">
+                                <span class="text-blue-400 font-bold font-mono text-xs uppercase">Step 10</span>
+                                <p class="text-slate-300 mt-1">The unit is ready for control action after a <span class="param-badge">1 minute</span> delay. ACCUVAR will now autonomously switch capacitor banks to maintain the target PF.</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <button onclick="instSetStep(2)" class="text-slate-500 hover:text-white text-sm transition">← Back</button>
+                            <button onclick="instSetStep(4)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-lg font-bold transition">Next →</button>
+                        </div>
+                    </div>
+                    <!-- Step 4 -->
+                    <div id="inst-step-4" class="inst-content">
+                        <h3 class="text-xl font-bold text-white mb-4">Pre-Commission Checklist</h3>
+                        <div class="space-y-2 text-sm" id="inst-checks">
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">All voltage terminals connected correctly (R, Y, B, N)</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">Phase sequence R-Y-B verified at terminals 24, 23, 22</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">Neutral wire connected to terminal 21 (N)</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">CT S1 terminal connected to M1 / M2 / M3 correctly (polarity correct)</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">Capacitor CT connected to CM (26) &amp; CL (25) — S1 to CM</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">Control fuses 1.0A rating inserted in R, Y, B supply lines</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">All capacitor banks physically connected (all fuse links pushed in)</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">Programming parameters set: CT Ratio, Control Mode, Alarm Mode, Desired PF</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">Auto Sense completed — all banks detected and sizes displayed</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-slate-950 rounded-xl border border-slate-800 cursor-pointer hover:border-blue-500/50 transition">
+                                <input type="checkbox" class="w-5 h-5 rounded accent-blue-500">
+                                <span class="text-slate-300">1-minute delay after power ON observed before expecting control action</span>
+                            </label>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <button onclick="instSetStep(3)" class="text-slate-500 hover:text-white text-sm transition">← Back</button>
+                            <button onclick="instSetStep(5)" class="bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-lg font-bold transition">Finish →</button>
+                        </div>
+                    </div>
+                    <!-- Step 5 -->
+                    <div id="inst-step-5" class="inst-content text-center py-12">
+                        <div class="w-20 h-20 bg-green-500/10 border border-green-500/30 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl">✓</div>
+                        <h3 class="text-2xl font-bold text-white mb-3">System Ready to Run!</h3>
+                        <p class="text-slate-400 max-w-sm mx-auto mb-8 text-sm">The Accuvar Trinity unit is correctly wired, programmed, and commissioned. It will now autonomously maintain power factor near unity.</p>
+                        <button onclick="switchModule('dashboard')" class="bg-purple-600 hover:bg-purple-500 text-white px-8 py-3 rounded-xl font-bold transition shadow-lg shadow-purple-900/20">View Live Dashboard →</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== DASHBOARD ========== -->
+        <section id="dashboard" class="module-section">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-purple-400 flex items-center gap-3">Live Simulation Dashboard <span class="flex h-2.5 w-2.5 relative"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-green-500"></span></span></h2>
+                    <p class="text-xs text-slate-500 mt-1 font-mono">Note: Data is simulated. Live data requires RS485/IoT integration.</p>
+                </div>
+                <button onclick="switchModule('home')" class="text-slate-500 hover:text-white text-sm transition">← Home</button>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+                    <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-1">System PF</p>
+                    <p class="text-3xl font-extrabold font-mono" id="dash-pf">0.98</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+                    <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-1">Active Power (kW)</p>
+                    <p class="text-3xl font-extrabold text-blue-400 font-mono" id="dash-kw">124.5</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+                    <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-1">Reactive (kVAR)</p>
+                    <p class="text-3xl font-extrabold text-orange-400 font-mono" id="dash-kvar">14.2</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+                    <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-1">Active Stages</p>
+                    <p class="text-3xl font-extrabold text-purple-400 font-mono" id="dash-stages">3 / 8</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+                    <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-1">Voltage R-Y-B (V)</p>
+                    <p class="text-lg font-bold font-mono text-cyan-400" id="dash-volts">240 / 245 / 242</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+                    <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-1">Current R-Y-B (A)</p>
+                    <p class="text-lg font-bold font-mono text-teal-400" id="dash-curr">99.0 / 101.5 / 98.2</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-center">
+                    <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-1">THD Voltage / Current</p>
+                    <p class="text-lg font-bold font-mono text-yellow-400" id="dash-thd">4.2% / 6.1%</p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-3 text-center">PF Trend — Last 60s</p>
+                    <canvas id="pfChart" height="180"></canvas>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                    <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-3 text-center">kVAR Trend — Last 60s</p>
+                    <canvas id="kvarChart" height="180"></canvas>
+                </div>
+            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <p class="text-xs text-slate-500 uppercase tracking-widest font-mono mb-2">System Alerts</p>
+                <div id="dash-alerts" class="text-sm font-mono p-3 bg-slate-950 rounded-lg">
+                    <span class="text-green-400">✓ System operating normally. Target PF maintained.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== DIGITAL MANUAL ========== -->
+        <section id="manual" class="module-section">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+                <h2 class="text-2xl font-bold text-teal-400">Digital Manual — Accuvar Trinity v2.0</h2>
+                <div class="flex items-center gap-3">
+                    <input type="text" id="manual-search" oninput="searchManual()" placeholder="Search manual…" class="bg-slate-900 border border-slate-700 text-sm rounded-lg px-3 py-2 text-white focus:outline-none focus:border-teal-500 w-52 transition font-mono">
+                    <button onclick="switchModule('home')" class="text-slate-500 hover:text-white text-sm transition whitespace-nowrap">← Home</button>
+                </div>
+            </div>
+            <div class="flex bg-slate-900 border border-slate-800 rounded-xl overflow-hidden" style="height:78vh">
+                <div class="w-44 md:w-52 shrink-0 bg-slate-950 border-r border-slate-800 overflow-y-auto">
+                    <ul id="manual-nav" class="text-xs py-2"></ul>
+                </div>
+                <div class="flex-1 p-5 md:p-8 overflow-y-auto text-sm leading-relaxed" id="manual-content">
+                    <div id="manual-text"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-slate-950 border-t border-slate-800 flex justify-around py-2 pb-4 z-50">
+        <button onclick="switchModule('home')" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-white transition p-1">
+            <span class="text-lg">🏠</span><span class="text-[9px] font-bold">Home</span>
+        </button>
+        <button onclick="switchModule('learn')" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-green-400 transition p-1">
+            <span class="text-lg">📚</span><span class="text-[9px] font-bold">Learn</span>
+        </button>
+        <button onclick="switchModule('calculate')" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-orange-400 transition p-1">
+            <span class="text-lg">🧮</span><span class="text-[9px] font-bold">Calc</span>
+        </button>
+        <button onclick="switchModule('troubleshoot')" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-red-400 transition p-1">
+            <span class="text-lg">🔧</span><span class="text-[9px] font-bold">Fix</span>
+        </button>
+        <button onclick="switchModule('install')" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-blue-400 transition p-1">
+            <span class="text-lg">⚡</span><span class="text-[9px] font-bold">Install</span>
+        </button>
+        <button onclick="switchModule('dashboard')" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-purple-400 transition p-1">
+            <span class="text-lg">📊</span><span class="text-[9px] font-bold">Dash</span>
+        </button>
+        <button onclick="switchModule('manual')" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-teal-400 transition p-1">
+            <span class="text-lg">📖</span><span class="text-[9px] font-bold">Manual</span>
+        </button>
+    </nav>
+
+<script>
+// ===================== NAVIGATION =====================
+const MODULES = ['home','learn','calculate','troubleshoot','install','dashboard','manual'];
+function switchModule(id) {
+    MODULES.forEach(m => {
+        const el = document.getElementById(m);
+        if (el) { el.classList.remove('active'); }
+    });
+    const target = document.getElementById(id);
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.remove('active');
+        if (b.textContent.trim().toLowerCase().startsWith(id.substring(0,4))) b.classList.add('active');
+    });
+    if (id === 'dashboard' && !chartsInitialized) initDashboard();
+    if (id === 'learn' && currentTopic === -1) loadTopic(0);
+    if (id === 'manual' && !manualBuilt) buildManual();
+    window.scrollTo(0,0);
+}
+
+// ===================== LEARN =====================
+const TOPICS = [
+  {
+    title: "PF Basics",
+    color: "green",
+    content: `
+      <h3 class="text-lg font-bold text-white mb-3">Understanding Power Factor</h3>
+      <p class="mb-3">Every power distribution system requires reliable metering of various electrical parameters. Information like loading imbalance, power factors at different times, and peak loading hours helps plan power usage and implement automatic switched capacitor systems to maintain power factor near unity. <strong>This is where ACCUVAR comes in.</strong></p>
+      <div class="highlight-box mb-4">
+        <strong class="text-blue-300">KW — Active Power:</strong> <span class="text-slate-300">The real work done (running motors, lighting, heating). Measured in kilowatts.</span><br><br>
+        <strong class="text-blue-300">KVA — Apparent Power:</strong> <span class="text-slate-300">The total power supplied by the utility. Always ≥ KW.</span><br><br>
+        <strong class="text-blue-300">KVAR — Reactive Power:</strong> <span class="text-slate-300">Used to sustain electromagnetic fields in inductive loads (motors, transformers). Does no real work but is drawn from the supply.</span>
+      </div>
+      <p class="mb-3"><strong class="text-white">Power Factor (PF) = KW / KVA.</strong> A PF of 1.0 (unity) means all power drawn is doing useful work. Low PF (e.g., 0.75) means significant reactive current is being drawn, leading to higher KVA, larger cables, transformer overload, and utility penalties.</p>
+      <div class="note-box">
+        <strong class="text-green-400">ACCUVAR Method:</strong> Uses the <strong>three watt-meter method</strong> to calculate KVA, KW &amp; KVAR. It is based on a powerful microcontroller finishing one complete measurement cycle in less than one second. Displays all parameters on a 128 × 64 display.
+      </div>
+    `,
+    quiz: [
+      { q: "What does KVAR represent in an electrical system?", a: ["Active Power (real work)", "Reactive Power (electromagnetic fields)", "Apparent Power (total supply)", "Line Frequency"], c: 1 },
+      { q: "Which method does ACCUVAR use to calculate KVA, KW and KVAR?", a: ["Single watt-meter method", "Two watt-meter method", "Three watt-meter method", "Direct CT measurement"], c: 2 },
+      { q: "Power Factor is calculated as:", a: ["PF = KW + KVAR", "PF = KW / KVA", "PF = KVA × KVAR", "PF = KVAR / KW"], c: 1 }
+    ]
+  },
+  {
+    title: "Installation",
+    color: "blue",
+    content: `
+      <h3 class="text-lg font-bold text-white mb-3">Hardware Installation</h3>
+      <p class="mb-3">ACCUVAR is designed for panel mounting with the following physical dimensions:</p>
+      <div class="highlight-box mb-4">
+        <strong class="text-blue-300">Bezel:</strong> 144 × 144 mm &nbsp;|&nbsp; <strong class="text-blue-300">Panel Cutout:</strong> 138 × 138 mm &nbsp;|&nbsp; <strong class="text-blue-300">Depth:</strong> 55 mm &nbsp;|&nbsp; <strong class="text-blue-300">Weight:</strong> 0.82 Kg
+      </div>
+      <p class="mb-2 font-semibold text-white">Key wiring rules from the manual:</p>
+      <ul class="space-y-2 mb-3 text-slate-300">
+        <li>✦ Connect R-Y-B phases to terminals <span class="param-badge">24(R)</span> <span class="param-badge">23(Y)</span> <span class="param-badge">22(B)</span> via <span class="param-badge">1.0A control fuses</span></li>
+        <li>✦ Neutral to terminal <span class="param-badge">21(N)</span></li>
+        <li>✦ R-phase Main CT → <span class="param-badge">M1(32)</span> &amp; <span class="param-badge">L1(31)</span> — S1 must go to M1</li>
+        <li>✦ Y-phase Main CT → <span class="param-badge">M2(30)</span> &amp; <span class="param-badge">L2(29)</span> — S1 must go to M2</li>
+        <li>✦ B-phase Main CT → <span class="param-badge">M3(28)</span> &amp; <span class="param-badge">L3(27)</span> — S1 must go to M3</li>
+        <li>✦ Y-phase Capacitor CT → <span class="param-badge">CM(26)</span> &amp; <span class="param-badge">CL(25)</span> — S1 must go to CM</li>
+        <li>✦ RS485 communication → <span class="param-badge">34(A+)</span> &amp; <span class="param-badge">33(B−)</span></li>
+      </ul>
+      <div class="warning-box">
+        <strong class="text-orange-400">⚠ Warning:</strong> Always ensure S1 of each CT goes to M1/M2/M3. Incorrect polarity will cause wrong PF reading and erratic relay behaviour. Use 230V AC coils only on contactors — <strong>DO NOT use 440V AC coils.</strong>
+      </div>
+    `,
+    quiz: [
+      { q: "What fuse rating is required for the R, Y, B voltage phase connections?", a: ["5.0 Amp", "2.0 Amp", "1.0 Amp", "No fuse needed"], c: 2 },
+      { q: "Which terminal does the S1 of R-phase CT connect to?", a: ["L1 (31)", "M1 (32)", "CM (26)", "CL (25)"], c: 1 },
+      { q: "What is the panel cutout size required for ACCUVAR?", a: ["144 × 144 mm", "138 × 138 mm", "100 × 100 mm", "150 × 150 mm"], c: 1 }
+    ]
+  },
+  {
+    title: "Programming",
+    color: "yellow",
+    content: `
+      <h3 class="text-lg font-bold text-white mb-3">Programming Mode</h3>
+      <p class="mb-3">To enter Programming Mode, press the <span class="param-badge">PROG/RUN</span> key for approximately 5 seconds continuously. The display shows <span class="screen-box inline">PROG MODE PRESS .*.</span> as confirmation.</p>
+      <p class="mb-2">Use <span class="param-badge">▲</span> <span class="param-badge">▼</span> to move the arrow (&gt;) and <span class="param-badge">ENTR</span> to select. Once selected, the arrow blinks — use ▲ ▼ again to change value, then ENTR to save. Press PROG/RUN for 4 seconds to exit and restart in Run Mode.</p>
+      <p class="mb-2 font-semibold text-white">All 21 programmable parameters:</p>
+      <div class="grid grid-cols-1 gap-1 text-xs font-mono mb-3">
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">01.</span> CT Ratio for load current (MCT-PRI: 5–5000, MCT-SEC: 1 or 5)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">02.</span> PT Ratio (1, 3.7727, 4.0, 6.2727, 30, 60, 100, 200, 300, 600, 1200)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">03.</span> Control Action (CONTROL=VAR / PID / SFIFO / FIFO)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">04.</span> Capacitor CT Enable &amp; Ratio (CAP-CT-ENB=YES/NO, CCT-PRI: 5–5000, CCT-SEC: 1 or 5)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">05.</span> Desired PF (SET-PF: 0.800–1.000 Lag | 1.800–1.999 for Lead, e.g. 1.998 = 0.998 Lead)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">06.</span> Switching Type (SWITCH=THYR for Thyristor / CONT for Contactor)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">07.</span> Number of Capacitor Stages (STAGE: 2–15)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">08.</span> Meter Address for RS485 (UNIT ADDR: 1–255)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">09.</span> Baud Rate (BAUD RATE: 9600 or 19200)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">10.</span> Alarm Mode (ALRM MODE: PF / I_THD / V_THD / NO)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">11.</span> Alarm Limit (ALRM LMT: 0.800–0.999 for PF | 10–80% for THD)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">12.</span> Alarm Delay (ALRM DLY: 20–180 seconds)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">13.</span> Switch Delay (SWITCH DLY: 1–10 fast / 40–120 normal switching)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">14.</span> Damp Factor (DAMP: 1–10 fast / 5–20 normal — higher = slower response to transients)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">15.</span> Reference Bank number (REF-BANK: 1–15)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">16.</span> Auto Phase Sequence Detection (CHECK-SEQ: YES/NO)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">17.</span> Phase Input Sequence for all 3 channels (CH1-SEQ, CH2-SEQ, CH3-SEQ)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">18.</span> Minimum Bank (MIN.BANK: 100% or 75%)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">19.</span> Auto Sense of Capacitors (AUTO SENSE: YES/NO)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">20.</span> Minimum Operating Current for FIFO/SFIFO (M-OPR: NORMAL=5% / SENSITIVE=1% of CT Primary)</div>
+        <div class="bg-slate-950 rounded p-2 border border-slate-800"><span class="text-cyan-400">21.</span> PF Value to switch OFF banks (OFF-SET: 1.780 to Target_PF–0.02)</div>
+      </div>
+      <div class="note-box">
+        <strong class="text-green-400">Note:</strong> Parameters 4, 18, 19, 20, 21 are only relevant in VAR control mode. They are NOT applicable in FIFO or SFIFO mode.
+      </div>
+    `,
+    quiz: [
+      { q: "How do you enter Programming Mode on the Accuvar?", a: ["Press ENTR key once", "Press UP + DOWN together", "Press PROG/RUN for ~5 seconds", "Cycle the power supply"], c: 2 },
+      { q: "What is the selectable range for Main CT Primary (MCT-PRI)?", a: ["1 to 100 A", "5 to 5000 A", "10 to 1000 A", "50 to 500 A"], c: 1 },
+      { q: "In VAR control mode, which parameters become relevant that are NOT used in FIFO mode?", a: ["PT Ratio and Baud Rate", "Meter Address and Stages", "Auto Sense and Min Bank", "Alarm Limit and Alarm Delay"], c: 2 }
+    ]
+  },
+  {
+    title: "Run Mode",
+    color: "purple",
+    content: `
+      <h3 class="text-lg font-bold text-white mb-3">Run Mode Displays</h3>
+      <p class="mb-3">After power on, ACCUVAR enters Run Mode by default. The display auto-scrolls every 5–6 seconds. Freeze any screen by pressing <span class="param-badge">ENTR</span>. A frozen screen shows <span class="param-badge">F</span> in the lower right corner. Use ▲ ▼ to manually scroll.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4 text-xs">
+        <div>
+          <div class="screen-box mb-1">.699 ++ PF</div>
+          <p class="text-slate-400">System PF. ++ = Inductor (Lag). -- = Capacitor (Lead).</p>
+        </div>
+        <div>
+          <div class="screen-box mb-1">Vr: 240.1<br>Vy: 245.4<br>Vb: 242.6</div>
+          <p class="text-slate-400">Phase voltages R, Y, B (L-N).</p>
+        </div>
+        <div>
+          <div class="screen-box mb-1">Ir: 99.05<br>Iy: 101.7<br>Ib: 90.56<br>I-Cap: 20.25</div>
+          <p class="text-slate-400">Currents R, Y, B and capacitor current. &lt;100 shows 2 decimals, ≥100 shows 1.</p>
+        </div>
+        <div>
+          <div class="screen-box mb-1">KW: 75.12<br>KVA: 76.02<br>KVAR: 1.56 LG<br>AvgPF: 0.995</div>
+          <p class="text-slate-400">System KW, KVA, KVAR with LG/LD indication and Average integrated PF.</p>
+        </div>
+        <div>
+          <div class="screen-box mb-1">PFr: 0.998 LG<br>PFy: 0.994 LG<br>PFb: 0.999 LD<br>Manual Mode ON</div>
+          <p class="text-slate-400">Individual PF per phase. Also shows "Manual Mode ON" if K1/K2 voltage applied.</p>
+        </div>
+        <div>
+          <div class="screen-box mb-1">KWH:<br>521.6<br>KVAH:<br>524.8</div>
+          <p class="text-slate-400">Total Active Energy (KWh) and Total Apparent Energy (KVAh).</p>
+        </div>
+        <div>
+          <div class="screen-box mb-1">KVARH-LAG: 1.28<br>KVARH-LEAD: 0.89</div>
+          <p class="text-slate-400">Total Reactive Energy — LAG and LEAD shown separately.</p>
+        </div>
+        <div>
+          <div class="screen-box mb-1">Vr Hrm[%] 9th 3.0<br>3rd 2.1 11th 0.6<br>5th 0.5 13th 1.1<br>7th 1.5 15th 0.3</div>
+          <p class="text-slate-400">Up to 15th Odd Harmonics for R-phase Voltage (similar screens for Y, B).</p>
+        </div>
+        <div>
+          <div class="screen-box mb-1">THD[%]<br>Vr 15.1  Ir 12.1<br>Vy 9.2   Iy 10.8<br>Vb 10.1  Ib 9.6</div>
+          <p class="text-slate-400">Total Harmonic Distortion (THD) for all phases — voltage and current.</p>
+        </div>
+      </div>
+      <div class="highlight-box">
+        <strong class="text-blue-300">Resetting Average PF:</strong> Press ▲ in Run Mode for ~5 seconds. Average PF is reset to 1.00.<br><br>
+        <strong class="text-blue-300">Freezing Display:</strong> Press <span class="param-badge">ENTR</span> to freeze/unfreeze. Page shows 'F' when frozen.
+      </div>
+    `,
+    quiz: [
+      { q: "How do you freeze the auto-scroll display in Run Mode?", a: ["Press PROG/RUN", "Press ENTR key", "Press UP arrow for 5 seconds", "Turn the unit off and on"], c: 1 },
+      { q: "Up to which odd harmonic order does ACCUVAR display?", a: ["5th", "7th", "11th", "15th"], c: 3 },
+      { q: "How often do Run Mode displays auto-scroll by default?", a: ["Every 1–2 seconds", "Every 5–6 seconds", "Every 10 seconds", "Every 30 seconds"], c: 1 }
+    ]
+  },
+  {
+    title: "Troubleshooting",
+    color: "red",
+    content: `
+      <h3 class="text-lg font-bold text-white mb-3">Diagnosing System Faults</h3>
+      <p class="mb-3">System faults fall into three categories. Repairs at site are patch work only — if the relay itself is defective, it must be sent to the factory.</p>
+      <div class="highlight-box mb-3">
+        <strong class="text-blue-300">Category A:</strong> Basic configuration errors.<br>
+        <strong class="text-blue-300">Category B:</strong> Errors in system design / implementation.<br>
+        <strong class="text-blue-300">Category C:</strong> Defects in actual connected equipment.
+      </div>
+      <p class="mb-2 font-semibold text-white">Key fault signatures and causes:</p>
+      <div class="space-y-2 text-xs">
+        <div class="bg-slate-950 rounded-lg p-3 border border-slate-800">
+          <span class="text-red-400 font-bold">Relay Dead:</span> Check voltage at R-Y, Y-B, B-R. If voltages present → relay is defective, send for repair. If voltages absent → check control fuses and panel supply.
+        </div>
+        <div class="bg-slate-950 rounded-lg p-3 border border-slate-800">
+          <span class="text-red-400 font-bold">Wrong PF Display:</span> Wiring is wrong. Only one of 6 possible R-Y-B wire combinations is correct. Try all six. Also verify your expected PF estimate is actually correct.
+        </div>
+        <div class="bg-slate-950 rounded-lg p-3 border border-slate-800">
+          <span class="text-red-400 font-bold">Capacitors ON but PF Doesn't Improve:</span> CTs are likely on the load bus only, so capacitor current passes through CT and cancels. Move CTs to true main incomer. Also check if all capacitors are healthy (measure current per lead).
+        </div>
+        <div class="bg-slate-950 rounded-lg p-3 border border-slate-800">
+          <span class="text-red-400 font-bold">PF Improves But Doesn't Reach Set Value:</span> Total installed kVAR is too low. Add more capacitor stages. Check MIN BANK setting.
+        </div>
+        <div class="bg-slate-950 rounded-lg p-3 border border-slate-800">
+          <span class="text-red-400 font-bold">Contactors Won't Switch OFF:</span> External manual control wired incorrectly (contactors latching through holding contacts). Or 440V AC coils used — use 230V AC only. Or snubber leakage keeps small loads ON.
+        </div>
+        <div class="bg-slate-950 rounded-lg p-3 border border-slate-800">
+          <span class="text-red-400 font-bold">PF Always 1.0:</span> Load current is below minimum operating current (1% or 5% of CT Primary). Increase load or check CT ratio settings.
+        </div>
+      </div>
+      <div class="note-box mt-3">
+        <strong class="text-green-400">Tip:</strong> Use the interactive Troubleshoot module for step-by-step YES/NO diagnostic guidance covering all 6 fault scenarios.
+      </div>
+    `,
+    quiz: [
+      { q: "If specified voltages are present at R-Y, Y-B, B-R terminals but relay is dead, what does this indicate?", a: ["Check fuses immediately", "Relay is defective — send to factory", "Reset CT ratio in programming", "Increase DAMP factor"], c: 1 },
+      { q: "If capacitors switch ON but PF doesn't improve, what is the most likely cause?", a: ["Display is broken", "CTs placed on Load Bus — not on Main Incomer", "Relay alarm mode is wrong", "Target PF set too high"], c: 1 },
+      { q: "What is the minimum operating current threshold in 'Sensitive' mode for FIFO/SFIFO?", a: ["5% of CT Primary", "1% of CT Primary", "10% of CT Primary", "0.5% of CT Primary"], c: 1 }
+    ]
+  }
+];
+
+let currentTopic = -1;
+let currentQuizAnswers = {};
+let quizSubmitted = false;
+
+function loadTopic(idx) {
+    currentTopic = idx;
+    quizSubmitted = false;
+    currentQuizAnswers = {};
+    for (let i = 0; i < TOPICS.length; i++) {
+        const b = document.getElementById('tbtn-' + i);
+        if (b) b.className = `w-full text-left px-4 py-3 rounded-lg bg-slate-900 text-slate-400 font-semibold border-l-4 border-transparent hover:bg-slate-800 text-sm transition`;
+    }
+    const activeBtn = document.getElementById('tbtn-' + idx);
+    if (activeBtn) activeBtn.className = `w-full text-left px-4 py-3 rounded-lg bg-green-900/30 text-white font-semibold border-l-4 border-green-500 text-sm`;
+    const t = TOPICS[idx];
+    document.getElementById('topic-content').innerHTML = `
+        <div class="text-xs text-green-500 font-bold uppercase tracking-widest mb-3 font-mono">Topic ${idx + 1} of ${TOPICS.length}</div>
+        ${t.content}
+    `;
+}
+
+function startQuiz() {
+    if (currentTopic === -1) return;
+    quizSubmitted = false;
+    currentQuizAnswers = {};
+    const t = TOPICS[currentTopic];
+    document.getElementById('quiz-title').textContent = `Quiz: ${t.title}`;
+    renderQuizQuestions();
+    document.getElementById('quiz-score').classList.add('hidden');
+    document.getElementById('quiz-submit').classList.remove('hidden');
+    document.getElementById('retry-btn').classList.add('hidden');
+    document.getElementById('quiz-modal').classList.remove('hidden');
+}
+
+function renderQuizQuestions() {
+    const t = TOPICS[currentTopic];
+    let html = '';
+    t.quiz.forEach((q, qi) => {
+        html += `<div class="mb-2"><p class="text-white font-semibold mb-3 text-sm">${qi+1}. ${q.q}</p><div class="space-y-2">`;
+        q.a.forEach((opt, oi) => {
+            let cls = 'w-full text-left p-3 rounded-lg border text-sm transition ';
+            if (quizSubmitted) {
+                if (oi === q.c) cls += 'bg-green-900/30 border-green-600 text-green-300';
+                else if (currentQuizAnswers[qi] === oi) cls += 'bg-red-900/30 border-red-700 text-red-300';
+                else cls += 'bg-slate-950 border-slate-800 text-slate-500';
+            } else {
+                cls += currentQuizAnswers[qi] === oi
+                    ? 'bg-blue-900/30 border-blue-600 text-white'
+                    : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-600';
+            }
+            html += `<button class="${cls}" onclick="selectAnswer(${qi},${oi})" ${quizSubmitted ? 'disabled' : ''}>${opt}</button>`;
+        });
+        html += `</div></div>`;
+    });
+    document.getElementById('quiz-body').innerHTML = html;
+}
+
+function selectAnswer(qi, oi) {
+    if (quizSubmitted) return;
+    currentQuizAnswers[qi] = oi;
+    renderQuizQuestions();
+}
+
+function submitQuiz() {
+    const t = TOPICS[currentTopic];
+    if (Object.keys(currentQuizAnswers).length < t.quiz.length) {
+        alert('Please answer all questions before submitting.');
+        return;
+    }
+    quizSubmitted = true;
+    let score = 0;
+    t.quiz.forEach((q, qi) => { if (currentQuizAnswers[qi] === q.c) score++; });
+    renderQuizQuestions();
+    document.getElementById('quiz-score').classList.remove('hidden');
+    document.getElementById('quiz-score-text').textContent = `You scored ${score} / ${t.quiz.length}`;
+    document.getElementById('quiz-submit').classList.add('hidden');
+    document.getElementById('retry-btn').classList.remove('hidden');
+}
+
+function retryQuiz() { startQuiz(); }
+function closeQuiz() { document.getElementById('quiz-modal').classList.add('hidden'); }
+
+// ===================== CALCULATE =====================
+function runCalculation() {
+    const kw = parseFloat(document.getElementById('calc-kw').value) || 0;
+    const pfCurr = parseFloat(document.getElementById('calc-curr-pf').value) || 0;
+    const pfTarg = parseFloat(document.getElementById('calc-target-pf').value) || 0;
+    const stages = parseInt(document.getElementById('calc-stages').value);
+
+    if (!kw || pfCurr <= 0 || pfCurr >= 1 || pfTarg <= 0 || pfTarg > 1) { alert('Please enter valid parameters.'); return; }
+    if (pfTarg <= pfCurr) { alert('Target PF must be higher than Current PF.'); return; }
+
+    const kvar = kw * (Math.tan(Math.acos(pfCurr)) - Math.tan(Math.acos(pfTarg)));
+    const kvarPerStage = kvar / stages;
+    const improvement = ((pfTarg - pfCurr) / pfCurr * 100);
+
+    document.getElementById('res-kvar').textContent = kvar.toFixed(2);
+    document.getElementById('res-stages').textContent = `${stages} stages`;
+    document.getElementById('res-per-stage').textContent = `${kvarPerStage.toFixed(2)} kVAR`;
+    document.getElementById('res-improv').textContent = `+${improvement.toFixed(1)}%`;
+
+    const pct = Math.min((pfCurr / pfTarg) * 100, 98);
+    document.getElementById('pf-bar').style.width = pct + '%';
+    document.getElementById('pf-bar-label').textContent = `${pfCurr} → ${pfTarg}`;
+
+    const penalty = document.getElementById('res-penalty');
+    if (pfTarg >= 0.97) { penalty.textContent = 'Low Risk'; penalty.className = 'text-green-400 font-bold font-mono'; }
+    else if (pfTarg >= 0.90) { penalty.textContent = 'Medium Risk'; penalty.className = 'text-yellow-400 font-bold font-mono'; }
+    else { penalty.textContent = 'High Risk'; penalty.className = 'text-red-400 font-bold font-mono'; }
+
+    if (pfTarg > 0.99) document.getElementById('calc-warning').classList.remove('hidden');
+    else document.getElementById('calc-warning').classList.add('hidden');
+
+    let breakdown = '';
+    for (let i = 1; i <= stages; i++) breakdown += `Stage ${i}: ${kvarPerStage.toFixed(2)} kVAR\n`;
+    const bd = document.getElementById('stage-breakdown');
+    bd.textContent = breakdown;
+    bd.classList.remove('hidden');
+}
+
+function resetCalc() {
+    document.getElementById('calc-kw').value = 100;
+    document.getElementById('calc-curr-pf').value = 0.80;
+    document.getElementById('calc-target-pf').value = 0.99;
+    document.getElementById('res-kvar').textContent = '--';
+    document.getElementById('res-stages').textContent = '--';
+    document.getElementById('res-per-stage').textContent = '--';
+    document.getElementById('res-improv').textContent = '--';
+    document.getElementById('res-penalty').textContent = '--';
+    document.getElementById('pf-bar').style.width = '80%';
+    document.getElementById('calc-warning').classList.add('hidden');
+    document.getElementById('stage-breakdown').classList.add('hidden');
+}
+
+function downloadReport() {
+    const kw = document.getElementById('calc-kw').value;
+    const pfC = document.getElementById('calc-curr-pf').value;
+    const pfT = document.getElementById('calc-target-pf').value;
+    const kvar = document.getElementById('res-kvar').textContent;
+    const stages = document.getElementById('res-stages').textContent;
+    const perStage = document.getElementById('res-per-stage').textContent;
+    const improv = document.getElementById('res-improv').textContent;
+    const txt = `ACCUVAR APFC SIMULATION REPORT\n================================\nGenerated: ${new Date().toLocaleString()}\n\nINPUTS\n------\nLoad: ${kw} kW\nCurrent PF: ${pfC}\nTarget PF: ${pfT}\nSystem: 3 Phase 4 Wire, 415V\n\nRESULTS\n-------\nRequired kVAR: ${kvar} kVAR\nRecommended Stages: ${stages}\nkVAR per Stage: ${perStage}\nPF Improvement: ${improv}\n\nGenerated by Accuvar APFC Smart Platform\n(Based on Accuvar Trinity Manual v2.0)`;
+    const blob = new Blob([txt], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `Accuvar_kVAR_Report_${Date.now()}.txt`;
+    a.click();
+}
+
+function shareResult() {
+    const kvar = document.getElementById('res-kvar').textContent;
+    const pfC = document.getElementById('calc-curr-pf').value;
+    const pfT = document.getElementById('calc-target-pf').value;
+    const txt = `Accuvar APFC Calc: ${kvar} kVAR required to improve PF from ${pfC} → ${pfT} | Generated by Accuvar APFC Smart Platform`;
+    navigator.clipboard?.writeText(txt).then(() => alert('Copied to clipboard!')).catch(() => alert('Copy failed. Please copy manually.'));
+}
+
+// ===================== TROUBLESHOOT =====================
+const TS_FLOW = {
+    1: { start: 'q1',
+         q1: { text: 'Are the specified voltages available at the voltage terminals R-Y, Y-B, and B-R? (Check with a multimeter — do not use a neon tester.)', yes: 'res1', no: 'res2' },
+         res1: { cause: 'Relay is defective.', sol: 'Voltages are present but the relay is dead. In all probability the relay is defective. Please send it back to the factory for repairs.' },
+         res2: { cause: 'Supply voltage missing at relay terminals.', sol: 'Check control fuses (1.0A) in the panel. Ensure the 3-phase supply is connected to terminals 24(R), 23(Y), 22(B) with neutral at 21(N). Verify panel incoming supply.' }
+    },
+    2: { start: 'q1',
+         q1: { text: 'Have you tried all six possible combinations of the R, Y, B wires at the voltage input terminals?', yes: 'q2', no: 'res1' },
+         q2: { text: 'Is your expected PF estimate definitely correct? (Verified with an independent instrument?)', yes: 'res2', no: 'res3' },
+         res1: { cause: 'Wiring combination not tried.', sol: 'Change around the wires to R, Y, B terminals. There are six possible combinations and only one is correct. Try all six systematically.' },
+         res2: { cause: 'CT polarity or phase issue.', sol: 'All 6 wiring combinations tried and PF is still wrong. Verify CT polarities — ensure S1 goes to M1/M2/M3. Also verify CT is on main incomer, not load bus.' },
+         res3: { cause: 'Estimation error.', sol: 'The displayed PF may actually be correct. Re-evaluate your expected PF using a known reference instrument before concluding the display is wrong.' }
+    },
+    3: { start: 'q1',
+         q1: { text: 'Are the CTs located ONLY on the Load Bus? (i.e. capacitor current passes back through the CTs, cancelling the reading)', yes: 'res1', no: 'q2' },
+         q2: { text: 'Are all capacitors healthy? Measure current in each lead of each capacitor as it switches ON to verify.', yes: 'q3', no: 'res2' },
+         q3: { text: 'Is the Target PF set correctly in programming mode and is the control action mode correct?', yes: 'res3', no: 'res4' },
+         res1: { cause: 'Incorrect CT location — CTs on Load Bus only.', sol: 'Move the CTs to the true main Incomer position so that capacitor current does NOT pass through them. This is the most common cause of this fault.' },
+         res2: { cause: 'Defective capacitors or blown fuses.', sol: 'One or more capacitors are defective or their fuses are blown. Replace blown fuses. Measure current in each capacitor lead — zero current indicates a blown unit.' },
+         res3: { cause: 'Unknown — system setup appears correct.', sol: 'Check REF_BANK setting. Ensure the capacitor bank connected to REF_BANK is actually a 3-phase bank. Contact Trinity service if issue persists.' },
+         res4: { cause: 'Incorrect programming parameters.', sol: 'Enter Programming Mode and verify: SET-PF (desired target), CONTROL= (VAR/FIFO/SFIFO/PID), and CT ratio values. Correct parameters and retest.' }
+    },
+    4: { start: 'q1',
+         q1: { text: 'Has the relay switched ON ALL available capacitor stages?', yes: 'res1', no: 'res2' },
+         res1: { cause: 'Total installed kVAR is too low.', sol: 'All stages are ON but PF target is not reached. The installed capacitor bank kVAR is insufficient for the load. Add more capacitor stages and reconfigure the panel.' },
+         res2: { cause: 'MIN BANK setting or stage configuration issue.', sol: 'Check the MIN.BANK percentage setting. In VAR mode, if the required kVAR is smaller than the minimum bank size × MIN.BANK%, the relay will not switch. Try setting MIN.BANK to 75%.' }
+    },
+    5: { start: 'q1',
+         q1: { text: 'Are external Manual Controls used, or are 440V AC coils installed on the contactors?', yes: 'res1', no: 'q2' },
+         q2: { text: 'Are small electronic loads — hooters, small relays, or indicator lamps — connected directly to the relay output contacts?', yes: 'res2', no: 'res3' },
+         res1: { cause: 'Improper external manual control wiring or 440V AC coils.', sol: 'The contactors are latching through holding contacts in the external control. Use 230V AC coils ONLY — DO NOT use 440V AC coils. Extensive rewiring of isolating contacts is required.' },
+         res2: { cause: 'Snubber leakage current keeping small loads ON.', sol: 'Relay contacts have snubbers against voltage transients. Small leakage current keeps electronic hooters or small relays continuously energised. Connect these loads through an auxiliary contactor instead of directly.' },
+         res3: { cause: 'Relay contact fault.', sol: 'The relay output contact may be welded or stuck. Contact Trinity factory for relay output section repair.' }
+    },
+    6: { start: 'q1',
+         q1: { text: 'Is the load current greater than the Minimum Operating Current? (1% of CT Primary in Sensitive mode, or 5% in Normal mode)', yes: 'res1', no: 'res2' },
+         res1: { cause: 'CT Ratio programming error.', sol: 'Current is sufficient but PF always reads 1.0. Check CT Ratio settings in Programming Mode — MCT-PRI and MCT-SEC must match the actual CT installed.' },
+         res2: { cause: 'Load current is inadequate.', sol: 'The current through the relay CT is too low (below minimum operating threshold). The relay cannot sense accurately. Either increase the load, or change M-OPR setting to SENSITIVE (1% of CT Primary).' }
+    }
+};
+
+let currentTsProblem = null;
+let currentTsNode = null;
+
+function tsSelect(id) {
+    currentTsProblem = TS_FLOW[id];
+    currentTsNode = currentTsProblem.start;
+    document.getElementById('ts-step-1').classList.add('hidden');
+    document.getElementById('ts-step-2').classList.remove('hidden');
+    document.getElementById('ts-result').classList.add('hidden');
+    document.getElementById('ts-dialogue').classList.remove('hidden');
+    renderTsNode();
+}
+
+function renderTsNode() {
+    document.getElementById('ts-question').textContent = currentTsProblem[currentTsNode].text;
+}
+
+function tsAnswer(ans) {
+    const next = currentTsProblem[currentTsNode][ans];
+    const node = currentTsProblem[next];
+    if (node.text) {
+        currentTsNode = next;
+        renderTsNode();
+    } else {
+        document.getElementById('ts-dialogue').classList.add('hidden');
+        document.getElementById('ts-result').classList.remove('hidden');
+        document.getElementById('ts-cause').textContent = node.cause;
+        document.getElementById('ts-solution').textContent = node.sol;
+    }
+}
+
+function tsReset() {
+    currentTsProblem = null;
+    document.getElementById('ts-step-2').classList.add('hidden');
+    document.getElementById('ts-step-1').classList.remove('hidden');
+}
+
+// ===================== INSTALL =====================
+function instSetStep(n) {
+    for (let i = 1; i <= 5; i++) {
+        document.getElementById('inst-btn-' + i).className = 'whitespace-nowrap text-left px-4 py-2.5 rounded-lg bg-transparent text-slate-400 hover:text-white font-semibold text-sm transition';
+        document.getElementById('inst-step-' + i).className = 'inst-content';
+    }
+    document.getElementById('inst-btn-' + n).className = 'whitespace-nowrap text-left px-4 py-2.5 rounded-lg bg-blue-600 text-white font-semibold text-sm';
+    document.getElementById('inst-step-' + n).className = 'inst-content active';
+}
+
+// ===================== DASHBOARD =====================
+let chartsInitialized = false;
+let pfChart, kvarChart;
+const PF_DATA = Array(20).fill(0.98);
+const KVAR_DATA = Array(20).fill(14);
+
+function initDashboard() {
+    chartsInitialized = true;
+    const chartDefaults = {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: { x: { display: false, grid: { color: '#1e293b' } }, y: { grid: { color: '#1e293b' }, ticks: { color: '#475569', font: { family: 'JetBrains Mono', size: 10 } } } }
+    };
+    pfChart = new Chart(document.getElementById('pfChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: PF_DATA.map((_,i)=>i), datasets: [{ data: [...PF_DATA], borderColor: '#a78bfa', backgroundColor: 'rgba(167,139,250,0.08)', fill: true, tension: 0.4, pointRadius: 0 }] },
+        options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, min: 0.85, max: 1.00 } } }
+    });
+    kvarChart = new Chart(document.getElementById('kvarChart').getContext('2d'), {
+        type: 'line',
+        data: { labels: KVAR_DATA.map((_,i)=>i), datasets: [{ data: [...KVAR_DATA], borderColor: '#fb923c', backgroundColor: 'rgba(251,146,60,0.08)', fill: true, tension: 0.4, pointRadius: 0 }] },
+        options: { ...chartDefaults, scales: { ...chartDefaults.scales, y: { ...chartDefaults.scales.y, min: 0, max: 60 } } }
+    });
+
+    setInterval(() => {
+        const dash = document.getElementById('dashboard');
+        if (!dash || !dash.classList.contains('active')) return;
+        const pf = +(0.94 + Math.random() * 0.06).toFixed(2);
+        const kvar = +(5 + Math.random() * 45).toFixed(1);
+        const kw = +(120 + (Math.random()-0.5)*10).toFixed(1);
+        const stages = Math.floor(Math.random() * 7) + 2;
+        const vr = Math.floor(238 + Math.random()*8), vy = Math.floor(240 + Math.random()*8), vb = Math.floor(237 + Math.random()*8);
+        const ir = (98 + Math.random()*5).toFixed(1), iy = (100 + Math.random()*5).toFixed(1), ib = (97 + Math.random()*5).toFixed(1);
+        const thdV = (3 + Math.random()*4).toFixed(1), thdI = (5 + Math.random()*6).toFixed(1);
+
+        PF_DATA.push(pf); PF_DATA.shift();
+        KVAR_DATA.push(kvar); KVAR_DATA.shift();
+        pfChart.data.datasets[0].data = [...PF_DATA]; pfChart.update('none');
+        kvarChart.data.datasets[0].data = [...KVAR_DATA]; kvarChart.update('none');
+
+        const pfEl = document.getElementById('dash-pf');
+        pfEl.textContent = pf;
+        pfEl.className = pf >= 0.95 ? 'text-3xl font-extrabold font-mono text-green-400' : pf >= 0.90 ? 'text-3xl font-extrabold font-mono text-yellow-400' : 'text-3xl font-extrabold font-mono text-red-400';
+        document.getElementById('dash-kw').textContent = kw;
+        document.getElementById('dash-kvar').textContent = kvar;
+        document.getElementById('dash-stages').textContent = `${stages} / 8`;
+        document.getElementById('dash-volts').textContent = `${vr} / ${vy} / ${vb}`;
+        document.getElementById('dash-curr').textContent = `${ir} / ${iy} / ${ib}`;
+        document.getElementById('dash-thd').textContent = `${thdV}% / ${thdI}%`;
+
+        const alertEl = document.getElementById('dash-alerts');
+        if (pf < 0.90) alertEl.innerHTML = `<span class="text-red-400">⚠ LOW POWER FACTOR: ${pf} — Adding capacitor stages.</span>`;
+        else if (parseFloat(thdI) > 10) alertEl.innerHTML = `<span class="text-yellow-400">⚠ HIGH THD DETECTED: I-THD ${thdI}% — Consider harmonic filters.</span>`;
+        else alertEl.innerHTML = `<span class="text-green-400">✓ System operating normally. Target PF maintained. No alarms.</span>`;
+    }, 3000);
+}
+
+// ===================== DIGITAL MANUAL =====================
+let manualBuilt = false;
+const MANUAL_SECTIONS = [
+    { id: 'intro', title: 'Introduction', content: `
+        <p class="mb-3">Every power distribution system requires reliable metering of various electrical parameters. From the electricity user's point of view, this is important for saving electrical energy wherever possible. Not only should the distribution transformer be loaded optimally, but it should also operate at near unity power factor. The load imbalance on the three phases should be within reasonable limits.</p>
+        <p class="mb-3">Thus, information like amount of loading imbalance, power factors at different times of the day, peak loading hour etc. can be of great help in planning usage of power and also implementing automatic switched capacitor systems to maintain power factor near unity. This is where <strong class="text-white">ACCUVAR</strong> comes in.</p>
+        <div class="highlight-box mb-4">ACCUVAR is a KVAR based controller which controls capacitor banks optimally to achieve near unity power factor and also which measures/calculates various electrical parameters. ACCUVAR is meant for use in <strong>three phase four wire electrical systems.</strong></div>
+        <p class="mb-3">It uses the <strong class="text-white">three watt-meter method</strong> to calculate KVA, KW &amp; KVAR. ACCUVAR is based on a powerful micro-controller. The controller receives voltage &amp; current signals and performs high speed measurement and calculations, typically finishing one complete measurement cycle in less than a second.</p>
+        <p>The unit displays all parameters locally on a <strong class="text-white">128 × 64 Display.</strong> The user-friendly keypad on the front makes programming the unit (for C.T. ratios etc.) very easy. ACCUVAR is thus a very versatile controller and accurate information interface for the user.</p>
+        <div class="note-box mt-4"><strong class="text-green-400">Published:</strong> 01.11.2021 &nbsp;|&nbsp; <strong class="text-green-400">Document Version:</strong> 2.0 &nbsp;|&nbsp; <strong class="text-green-400">Model:</strong> TRINITY</div>
+    `},
+    { id: 'features', title: 'Main Features', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Page [2]</p>
+        <div class="grid grid-cols-1 gap-2 text-sm">
+            ${[
+                '3P4W (Three Phase Four Wire) electrical system',
+                'Three powers: KW, KVA and KVAR measurement',
+                'Three phase voltages (Vr, Vy &amp; Vb) and currents (Ir, Iy, Ib)',
+                'Auto phase sequence and polarity detection and correction',
+                'Active energy (KWh) and apparent energy (KVAh)',
+                'Capacitor CT sensing enable/disable selection',
+                'CT ratio for both load current and capacitor current — selectable',
+                'PT ratio is site programmable',
+                'Capacitor current (I cap) measurement',
+                'Phase-Wise PF, System PF and Average integrated PF',
+                'Autosense / Manual types of KVAr control and capacitor bank size of every stage display',
+                'Eight / twelve / fifteen stage relays controller with one alarm selectable',
+                'Up to 15th Odd Harmonics and Total Harmonic Distortion (THD) for each Voltage and Current'
+            ].map((f,i) => `<div class="bg-slate-950 rounded-lg p-3 border border-slate-800 flex gap-3"><span class="text-teal-400 font-bold font-mono text-xs shrink-0">${String(i+1).padStart(2,'0')}</span><span>${f}</span></div>`).join('')}
+        </div>
+    `},
+    { id: 'techspecs', title: 'Technical Specifications', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Page [3]</p>
+        <table class="mb-6">
+            <thead><tr><th>Type</th><th>Name</th><th>Specification</th></tr></thead>
+            <tbody>
+                <tr><td rowspan="4" class="text-teal-400 font-bold">INPUT</td><td>Supply</td><td>Three Phase and Neutral of a 3P4W system</td></tr>
+                <tr><td>Voltage</td><td>Direct Voltage Input: Up to 300V L-N<br>Burden: 0.5VA</td></tr>
+                <tr><td>Current</td><td>Secondary Current Input: 5A or 1A<br>CT Ratio: Site Selectable<br>Range of Reading: 5 – 5000A<br>Burden: &lt; 1.0VA<br>Overload: 5A CT = 6A RMS Continuous<br>1A CT = 1.2A RMS Continuous</td></tr>
+                <tr><td>Power Supply</td><td>Self Powered from mains. Wide operating Voltage SMPS:<br><strong>80 VAC – 480 VAC, 45–65 Hz</strong></td></tr>
+                <tr><td rowspan="1" class="text-teal-400 font-bold">OUTPUT</td><td>Relay</td><td>Switching Voltage: Max. 250 VAC<br>Switching Power: Max. 1000W<br>Expected Mechanical Life: &gt;10 × 10⁶ switching operations<br>Expected Electrical Life: &gt;4 × 10⁶ @ (Load = 200VA, Cos∅ = 0.5)</td></tr>
+            </tbody>
+        </table>
+    `},
+    { id: 'measurement', title: 'Measurement Accuracy', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Page [4]</p>
+        <table>
+            <thead><tr><th>Type</th><th>Parameter</th><th>Accuracy / Range</th></tr></thead>
+            <tbody>
+                <tr><td rowspan="4" class="text-teal-400 font-bold">True RMS Basic</td><td>Voltage (VRN, VYN, VBN)</td><td>Accuracy: 0.5% of Reading</td></tr>
+                <tr><td>Current (IR, IY, IB)</td><td>Accuracy: 0.25% of Reading</td></tr>
+                <tr><td>Capacitor Current</td><td>CT Ratio: Site Selectable<br>Accuracy: 1.0% of Reading</td></tr>
+                <tr><td>Line Frequency (45–65 Hz)</td><td>Accuracy: 0.3% of Reading</td></tr>
+                <tr><td rowspan="4" class="text-teal-400 font-bold">Power</td><td>Active Power (P)</td><td>Accuracy: 1.0% of Reading (For |PF| &gt; 0.9)</td></tr>
+                <tr><td>Reactive Power (Q)</td><td>Accuracy: 1.5% of Reading (Between 0.5 Lag to 0.8 Lead)</td></tr>
+                <tr><td>Apparent Power (S)</td><td>Accuracy: 1.0% of Reading</td></tr>
+                <tr><td>Power Factor</td><td>Accuracy: 1.0% of Reading (|PF| ≥ 0.5)<br>Range: 0.05 to 1.00 Lag / Lead</td></tr>
+                <tr><td rowspan="3" class="text-teal-400 font-bold">Energy</td><td>Total Active Energy (KWh)</td><td>Range: 0 to 9999999.9 KWh<br>Accuracy: 1.0S as per IS13779</td></tr>
+                <tr><td>Total Apparent Energy (KVAh)</td><td>Range: 0 to 9999999.9 KVAh<br>Accuracy: 1.0% of Reading</td></tr>
+                <tr><td>Total Reactive Energy (KVARh — Lag &amp; Lead)</td><td>Range: 0 to 9999999.9<br>Accuracy: 1.5% of Reading</td></tr>
+                <tr><td class="text-teal-400 font-bold">Misc.</td><td>Cap. Bank KVAR</td><td>—</td></tr>
+            </tbody>
+        </table>
+    `},
+    { id: 'misc', title: 'Dimensions & Misc.', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Page [5]</p>
+        <table class="mb-6">
+            <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+            <tbody>
+                <tr><td class="font-semibold">Bezel</td><td>144 × 144 mm</td></tr>
+                <tr><td class="font-semibold">Panel Cutout</td><td>138 × 138 mm</td></tr>
+                <tr><td class="font-semibold">Depth of Installation</td><td>55 mm</td></tr>
+                <tr><td class="font-semibold">Operating Temperature</td><td>10°C to 50°C</td></tr>
+                <tr><td class="font-semibold">Weight</td><td>0.82 Kgs (Approx.)</td></tr>
+                <tr><td class="font-semibold">Min. Operating Current</td><td>1% or 5% of CT Primary for FIFO / SFIFO Mode</td></tr>
+            </tbody>
+        </table>
+    `},
+    { id: 'installation', title: 'Installation & Commissioning', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Pages [6–7]</p>
+        <p class="mb-4">To install and commission the unit, proceed with the following instructions in sequence:</p>
+        ${[
+            ['Step 1', 'Push the unit into the Panel and mount it by using the clamps provided.'],
+            ['Step 2', 'Connect the three phases with phase sequence R-Y-B to terminals marked R, Y and B respectively. Ensure three phases come through control fuses of 1.0 Amp rating — this protects electronics from damage due to severe over-voltages or phase faults.'],
+            ['Step 3', 'Connect the neutral wire to the terminal marked N (terminal 21).'],
+            ['Step 4', 'Connect the R-phase main CT two wires to M1 (32) & L1 (31) such that S1 from CT goes to M1. Connect Y-phase main CT to M2 (30) & L2 (29) — S1 to M2. Connect B-phase main CT to M3 (28) & L3 (27) — S1 to M3.'],
+            ['Step 5', 'Connect the Y-phase capacitor CT two wires to CM (26) & CL (25) such that S1 from CT goes to CM.'],
+            ['Step 6', 'Switch on the three-phase supply. Unit will power on from these three-phase supply.'],
+            ['Step 7', 'First, user must program: CT RATIO FOR MAIN CTs, CT RATIO FOR CAPACITOR CTs, and ALARM MODE. Refer Operational Details section. Proper relay operation can commence only after these three parameters are defined.'],
+            ['Step 8', 'Ensure all capacitors are in circuit (all fuses link pushed in). Give Autosense. ACCUVAR will first display "AUTOSENSING" and as it switches one bank at a time, it also displays the bank size of every stage. After AUTOSENSING is completed, the unit will Reset.'],
+            ['Step 9', 'In case user did not connect proper voltage and current input as described, Phase sequence detection will help detect correct phase sequence. The load current should have a value greater than zero. The unit will switch ON and OFF the bank selected by user in REF_BANK to perform auto correct. If load is non-linear or too many sudden changes occur in the load during this process, user must disable non-linear load temporarily and repeat the process or can manually enter the phase sequence value.'],
+            ['Step 10', 'Now, the unit is ready for control action after a 1 minute delay.']
+        ].map(([s,d]) => `<div class="mb-3 bg-slate-950 rounded-xl border border-slate-800 p-4"><span class="text-blue-400 font-bold font-mono text-xs uppercase">${s}</span><p class="text-slate-300 text-sm mt-1">${d}</p></div>`).join('')}
+    `},
+    { id: 'operational', title: 'Operational Details', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Page [9]</p>
+        <p class="mb-3">ACCUVAR is a versatile meter with all features needed to implement a robust electrical load management system. It can be configured to suit most PF control needs through field-programmable parameters.</p>
+        <div class="highlight-box mb-4">
+            <strong class="text-blue-300">Two Modes of Operation:</strong><br>
+            1. <strong>Programming Mode</strong> — Configure all parameters.<br>
+            2. <strong>Run Mode</strong> — Operational display and autonomous switching.
+        </div>
+        <p class="mb-3">After supplying power (80 VAC – 480 VAC), the unit displays immediately the power-on message and by default, the display comes into Run Mode showing system PF.</p>
+        <p class="mb-3">The unit is operated using the following keypad buttons:</p>
+        <div class="grid grid-cols-2 gap-3 mb-4 text-sm">
+            <div class="bg-slate-950 rounded-lg p-3 border border-slate-800 text-center"><span class="param-badge text-base">PROG/RUN</span><p class="text-slate-400 text-xs mt-2">Hold 5s to enter/exit Programming Mode</p></div>
+            <div class="bg-slate-950 rounded-lg p-3 border border-slate-800 text-center"><span class="param-badge text-base">▲</span><p class="text-slate-400 text-xs mt-2">Scroll up / Increment value</p></div>
+            <div class="bg-slate-950 rounded-lg p-3 border border-slate-800 text-center"><span class="param-badge text-base">▼</span><p class="text-slate-400 text-xs mt-2">Scroll down / Decrement value</p></div>
+            <div class="bg-slate-950 rounded-lg p-3 border border-slate-800 text-center"><span class="param-badge text-base">ENTR</span><p class="text-slate-400 text-xs mt-2">Select parameter / Save value / Freeze display</p></div>
+        </div>
+    `},
+    { id: 'programming', title: 'Programming Mode', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Pages [10–17]</p>
+        <p class="mb-4">Press <span class="param-badge">PROG/RUN</span> for 5 seconds to enter Programming Mode. Use ▲ ▼ to navigate and ENTR to select. To exit, press PROG/RUN for 4 seconds — unit restarts in Run Mode.</p>
+        <h4 class="text-white font-bold mb-3">1. CT Primary, CT Secondary, PT Ratio &amp; Control Action</h4>
+        <div class="screen-box mb-3">MCT-PRI=500<br>MCT-SEC=5<br>PT-RATIO=1<br>CONTROL=VAR</div>
+        <p class="mb-4 text-slate-300 text-sm">MCT-PRI: 5 to 5000. MCT-SEC: 1 or 5. PT-RATIO options: 1, 3.7727, 4.0, 6.2727, 30, 60, 100, 200, 300, 600, 1200. CONTROL: VAR, PID, SFIFO, FIFO.</p>
+        <h4 class="text-white font-bold mb-3">2. Capacitor CT &amp; Desired PF</h4>
+        <div class="screen-box mb-3">CAP-CT-ENB=YES<br>CCT-PRI=50<br>CCT-SEC=5<br>SET-PF=1.000</div>
+        <p class="mb-4 text-slate-300 text-sm">CAP-CT-ENB: YES/NO. CCT-PRI: 5 to 5000. CCT-SEC: 1 or 5. SET-PF: 0.800–1.000 for Lag; 1.800–1.999 for Lead (e.g. 1.998 = 0.998 Lead).</p>
+        <h4 class="text-white font-bold mb-3">3. Switching, Stages, Meter Address &amp; Baud Rate</h4>
+        <div class="screen-box mb-3">SWITCH=THYR<br>STAGE=2<br>UNIT ADDR=5<br>BAUD RATE=9600</div>
+        <p class="mb-4 text-slate-300 text-sm">SWITCH: THYR (Thyristor/fast) or CONT (Contactor/normal). STAGE: 2–15. UNIT ADDR: 1–255. BAUD RATE: 9600 or 19200. MODBUS-RTU protocol supported.</p>
+        <h4 class="text-white font-bold mb-3">4. Operation Type, Alarm Mode, Alarm Limit &amp; Alarm Delay</h4>
+        <div class="screen-box mb-3">OPER.=NORMAL<br>ALRM MODE=PF<br>ALRM LMT=0.800<br>ALRM DLY=20</div>
+        <p class="mb-4 text-slate-300 text-sm">OPER: NORMAL or SOLAR. ALRM MODE: PF, I_THD, V_THD, or NO. ALRM LMT: 0.800–0.999 for PF; 10–80% for THD. ALRM DLY: 20–180 seconds.</p>
+        <h4 class="text-white font-bold mb-3">5. Switch Delay, Damp, REF Bank &amp; Phase Sequence Check</h4>
+        <div class="screen-box mb-3">SWITCH DLY=60<br>DAMP=10<br>REF-BANK=1<br>CHECK-SEQ=YES</div>
+        <p class="mb-4 text-slate-300 text-sm">SWITCH DLY: 1–10 (fast/thyristor) or 40–120 (normal/contactor). DAMP: 1–10 (fast) or 5–20 (normal). Higher DAMP = slower response to kVAR transients. REF-BANK: 1–15. CHECK-SEQ: YES/NO.</p>
+        <h4 class="text-white font-bold mb-3">6. Phase Input Sequence &amp; Minimum Bank</h4>
+        <div class="screen-box mb-3">CH1-SEQ=M1/L1<br>CH2-SEQ=M2/L2<br>CH3-SEQ=M3/L3<br>MIN.BANK=100%</div>
+        <p class="mb-4 text-slate-300 text-sm">Phase input can be manually set for each channel. MIN.BANK: 100% or 75%. In VAR/PID mode, relay adds/removes banks if needed kVAR &gt; MIN.BANK% of smallest connected bank.</p>
+        <h4 class="text-white font-bold mb-3">7. Auto Sense, Min Operating Current &amp; Offset PF</h4>
+        <div class="screen-box mb-3">AUTO SENSE=YES<br>M-OPR=NORMAL<br>OFF-SET=1.780</div>
+        <p class="text-slate-300 text-sm">AUTO SENSE=YES: Unit switches each relay ON one by one to detect bank size (4–5 minutes). M-OPR: NORMAL = control until current &lt; 5% of CT Primary; SENSITIVE = until &lt; 1%. OFF-SET: PF value at which banks switch OFF in FIFO/SFIFO mode.</p>
+    `},
+    { id: 'runmode', title: 'Run Mode Displays', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Pages [18–19]</p>
+        <p class="mb-4">In Run Mode, press ▲ or ▼ to scroll. Press ENTR to freeze/unfreeze (frozen screen shows 'F' in lower right). Hold ▲ for 5 seconds to reset Average PF to 1.00.</p>
+        <div class="space-y-4">
+            ${[
+                ['.699 ++ PF', 'System Power Factor. ++ symbol = Inductor (Lagging). -- symbol = Capacitor (Leading).'],
+                ['Vr: 240.1\nVy: 245.4\nVb: 242.6', 'Phase voltages R, Y and B (L-N in volts).'],
+                ['Ir: 99.05\nIy: 101.7\nIb: 90.56\nI-Cap: 20.25', 'Phase currents R, Y, B and Capacitor current. Values <100 show 2 decimal digits; ≥100 show 1 decimal digit.'],
+                ['KW: 75.12\nKVA: 76.02\nKVAR: 1.56 LG\nAvgPF: 0.995', 'System KW, KVA, KVAR with LG/LD indication and Average integrated PF since last reset.'],
+                ['PFr: 0.998 LG\nPFy: 0.994 LG\nPFb: 0.999 LD\nManual Mode ON', 'Individual PF for R, Y, B phases. Also displays "Manual Mode ON" when AC voltage applied on K1 & K2 terminals.'],
+                ['KWH:\n521.6\nKVAH:\n524.8', 'Total Active Energy (KWh) and Total Apparent Energy (KVAh). <100 = 2 decimals, ≥100 = 1 decimal.'],
+                ['KVARH-LAG: 1.28\nKVARH-LEAD: 0.89', 'Total Reactive Energy — Lag and Lead shown individually.'],
+                ['Vr Hrm[%] 9th 3.0\n3rd 2.1  11th 0.6\n5th 0.5  13th 1.1\n7th 1.5  15th 0.3', 'Up to 15th Odd Harmonics of R-phase Voltage (%). Similar screens for Y-phase and B-phase voltages.'],
+                ['Ir Hrm[%] 9th 1.5\n3rd 1.2  11th 0.6\n5th 0.3  13th 1.1\n7th 0.5  15th 0.9', 'Up to 15th Odd Harmonics of R-phase Current (%). Similar screens for Y-phase and B-phase currents.'],
+                ['THD[%]\nVr 15.1  Ir 12.1\nVy 9.2   Iy 10.8\nVb 10.1  Ib 9.6', 'Total Harmonic Distortion (THD) in % for Voltage and Current — all three phases.']
+            ].map(([s,d]) => `<div class="flex flex-col md:flex-row gap-3 items-start"><div class="screen-box text-xs shrink-0 md:w-56">${s}</div><p class="text-slate-400 text-sm pt-1">${d}</p></div>`).join('')}
+        </div>
+    `},
+    { id: 'controloutputs', title: 'Control Outputs', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Pages [20–21]</p>
+        <p class="mb-3">The relay contacts are protected by snubbers against fast voltage transients which occur when inductive loads are switched off. Important points when using relay contacts:</p>
+        <div class="warning-box mb-4">
+            <strong class="text-orange-400">⚠ Critical Rules:</strong><br>
+            • Use <strong>230V AC coils only</strong> on contactors. DO NOT use 440V AC coils.<br>
+            • DO NOT switch small loads like electronic hooters or small relays with 230V AC coils directly from relay contacts.<br>
+            • Use relay contacts to switch an Auxiliary contactor and put the load on the contactor contacts.
+        </div>
+        <p class="mb-3 font-semibold text-white">System Considerations for Correct Operation:</p>
+        <p class="mb-2 text-sm">The relay senses total resultant PF of the system and switches capacitors through appropriate control gear to correct PF to the required level. To enable the relay to measure PF correctly:</p>
+        <ul class="space-y-2 text-sm mb-4">
+            <li class="flex gap-2"><span class="text-teal-400 font-bold">a.</span>R, Y, B voltage connections must be correct.</li>
+            <li class="flex gap-2"><span class="text-teal-400 font-bold">b.</span>The voltage must be nearest (±10%) to the specified voltage for the relay.</li>
+            <li class="flex gap-2"><span class="text-teal-400 font-bold">c.</span>Control circuits should use the built-in Manual control — easiest and most trouble-free. Push-buttons must be used for contactors to enable automatic cutoff on power failure. Provide isolating contacts for each contactor; otherwise the control can lock out in Auto mode by feedback over the Manual Bus.</li>
+        </ul>
+    `},
+    { id: 'ts-a', title: 'Troubleshooting (A)', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Pages [22–23]</p>
+        <p class="mb-3">ACCUVAR is robust electronic equipment and must be handled with care. Repairs at site are not recommended — at most it can be patch work. This section deals with finding faults in the system and establishing whether the relay is defective or whether it is a system problem.</p>
+        <div class="highlight-box mb-4"><strong class="text-blue-300">System faults — three categories:</strong><br>• Those related to basic configuration.<br>• Those related to errors and mistakes in system design implementation.<br>• Those related to faults in actual equipment.</div>
+        <h4 class="text-white font-semibold mb-2">a. Faults Related to Actual System Design</h4>
+        <p class="mb-2 text-sm">The most common fault: <strong>External Manual Control not implemented properly.</strong> Many designers use a 'Starter-relay' configuration for manual control and just bring the connection from the relay contact to the contactor. Two problems with this:</p>
+        <ul class="list-disc pl-5 mb-4 text-sm space-y-1"><li>Timing function is not provided from Manual control.</li><li>The scheme does not work in Auto mode.</li></ul>
+        <p class="mb-4 text-sm">Remedy: Change relay mode to Manual, use panel manually. Better alternative: change control wiring to incorporate suitable isolating contacts and timers.</p>
+        <h4 class="text-white font-semibold mb-2">b. Faults Related to External Cabling</h4>
+        <p class="mb-2 text-sm">Only two cables originate in the panel: the Power Incomer to the panel and the CT connections. The power flow from source to capacitor panel and entire load must be through the bus on which CTs are mounted. Provide separate CTs for the relay to avoid problems.</p>
+        <h4 class="text-white font-semibold mb-2 mt-4">c. Faults Related to Actual Site Conditions</h4>
+        <p class="mb-2 text-sm">Faults occur when actual site conditions differ from those assumed by the designer. These relate to location of load feeders on busbar, buscouplers, and connections from transformers. CT location is the most important factor.</p>
+        <p class="mb-2 text-sm">Another frequent problem: insufficient load on the power system (Plant not fully commissioned, or system planned for future expansion). Actual current through CT is very low compared to rating. The relay will not take control action. Remedy: connect a small bank directly (independent of automatic control) to compensate transformer losses.</p>
+        <h4 class="text-white font-semibold mb-2 mt-4">d. Faults in Actual Equipment</h4>
+        <p class="text-sm">Blown fuses, shorted CT, shorted voltage connections, switches that do not make contact, open connections. Check everything — before, during and after commissioning.</p>
+    `},
+    { id: 'ts-b', title: 'Troubleshooting Guide (B)', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Pages [24–25] — Read Section (A) before proceeding.</p>
+        <div class="space-y-4 text-sm">
+            ${[
+                ['1', 'Relay is dead.', 'Check that specified voltages are available at the voltage terminals of the relay. Do not check with a neon tester — use a multimeter and check voltages physically at R-Y, Y-B and B-R terminals. If voltages are available and relay is dead, the relay is in all probability defective. Please send it back for repairs.'],
+                ['2', 'Relay does not indicate expected PF.', 'Your wiring is wrong. Change around the wires leading to R, Y, B voltage terminals of the relay. There are six combinations, and only one of them is correct. Try all six. Also check that your expected PF estimate is reasonably correct.'],
+                ['3', 'Relay switches capacitors ON, but PF does not improve.', 'Two likely causes: (a) CTs are located only on the Load bus, and capacitor current is not passing through the CTs — change location to the true main Incomer. (b) The capacitors are all defective — measure the current in each lead of each capacitor as it switches ON to check. This also reveals if all fuses have blown.'],
+                ['4', 'Relay switches on all capacitors, PF improves but does not reach set value.', 'The total installed kVAR is too low. The relay switches on all capacitors but PF does not improve to the set value. Remedy is to add capacitors and add stages. This may need total reconfiguration of the panel wiring.'],
+                ['5', 'Relay switches on contactors but does not switch them off — indication on relay is correct.', 'All contactors switch off simultaneously when the last switch-off occurs. External Manual Control is not configured correctly. Contactors are latching up through holding contacts. Extensive rewiring required to remedy this fault. This is also possible if 440V AC coils have been used.'],
+                ['6', 'Relay is ON but PF meter indicates 1.0 always.', 'The current through the relay is inadequate.']
+            ].map(([n,issue,sol]) => `<div class="bg-slate-950 rounded-xl border border-slate-800 p-4"><div class="flex gap-3 mb-2"><span class="w-6 h-6 rounded-full bg-red-900/40 border border-red-700 flex items-center justify-center text-red-400 font-bold text-xs shrink-0 mt-0.5">${n}</span><p class="text-red-300 font-semibold">${issue}</p></div><p class="text-slate-400 pl-9">${sol}</p></div>`).join('')}
+        </div>
+    `},
+    { id: 'warranty', title: 'Warranty Statement', content: `
+        <p class="mb-3 text-slate-400 text-xs">Source: Manual Pages [Warranty]</p>
+        <p class="mb-3">Trinity warrants to the original retail purchaser that the product, if purchased new and used in India, conforms to the manufacturer's specifications and will be free from defects in workmanship and materials for a period of <strong class="text-white">one year from the date of original purchase</strong>, unless expressly stated otherwise by Trinity.</p>
+        <h4 class="text-white font-semibold mb-2 mt-4">What This Warranty Does NOT Cover:</h4>
+        <ul class="list-disc pl-5 text-sm space-y-1 mb-4">
+            <li>Refurbished or reconditioned products.</li>
+            <li>Damage caused by parts or supplies not manufactured, distributed or certified by Trinity.</li>
+            <li>Third-party parts or peripheral devices added after shipment from Trinity.</li>
+            <li>Misuse, abuse, improper installation, neglect, improper shipping, damage from disasters (fire, flood, lightning).</li>
+            <li>Improper electrical current or interaction with non-Trinity products.</li>
+            <li>Service other than by a Trinity Authorized Service.</li>
+            <li>If Trinity label, logo, rating label or serial number is removed.</li>
+        </ul>
+        <div class="note-box">Trinity's entire liability is limited to a refund of the price paid for the product covered by this limited warranty. Neither Trinity Energy Systems Pvt. Ltd. nor its affiliates shall be liable for any loss, inconvenience, or damage, including direct, special, incidental, or consequential damages.</div>
+    `}
+];
+
+function buildManual() {
+    manualBuilt = true;
+    let nav = '';
+    let content = '';
+    MANUAL_SECTIONS.forEach((sec, idx) => {
+        nav += `<li class="manual-nav-item border-b border-slate-900 cursor-pointer px-3 py-2.5 hover:bg-slate-800 text-slate-400 hover:text-teal-300 transition text-xs leading-snug" onclick="manualGoTo('${sec.id}')">${sec.title}</li>`;
+        content += `<div id="msec-${sec.id}" class="manual-section mb-10">
+            <h3 class="text-xl font-bold text-teal-400 mb-4 pb-2 border-b border-slate-800">${sec.title}</h3>
+            <div class="text-slate-300">${sec.content}</div>
+        </div>`;
+    });
+    document.getElementById('manual-nav').innerHTML = nav;
+    document.getElementById('manual-text').innerHTML = content;
+}
+
+function manualGoTo(id) {
+    const el = document.getElementById('msec-' + id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.manual-nav-item').forEach(i => i.classList.remove('text-teal-300', 'bg-slate-800/50'));
+}
+
+function searchManual() {
+    const q = document.getElementById('manual-search').value.toLowerCase().trim();
+    if (!q) {
+        document.querySelectorAll('.manual-section').forEach(s => s.style.display = 'block');
+        return;
+    }
+    MANUAL_SECTIONS.forEach(sec => {
+        const el = document.getElementById('msec-' + sec.id);
+        if (!el) return;
+        const match = sec.title.toLowerCase().includes(q) || sec.content.toLowerCase().includes(q);
+        el.style.display = match ? 'block' : 'none';
+    });
+}
+
+// Init on load
+loadTopic(0);
+</script>
+</body>
+</html>
