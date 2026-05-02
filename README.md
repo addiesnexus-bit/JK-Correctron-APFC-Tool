@@ -1,4 +1,4 @@
-# JK Correctron APFC Smart Platform
+# JK Correctron APFC Tool
 
 A web-based platform designed for learning, calculation, installation, and troubleshooting of Automatic Power Factor Correction (APFC) systems, specifically for Accuvar Trinity KVAR-based controllers.
 
@@ -31,3 +31,7 @@ This platform combines technical training, simulation, and practical tools into 
 ---
 
 ## Project Structure
+jk-correctron-apfc-tool/
+│
+├── index.html        # Main application file
+├── README.md         # Project documentation
